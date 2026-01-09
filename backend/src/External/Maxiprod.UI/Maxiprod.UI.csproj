@@ -15,4 +15,8 @@
     <ProjectReference Include="../Maxiprod.Infrastructure/Maxiprod.Infrastructure.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Controllers/" />
+  </ItemGroup>
+
 </Project>
