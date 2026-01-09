@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("Maxiprod.Application")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+1a37af286f0bb2dd2a34293774d0a7dcdeb1ff59")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+b46474f2ee614aee351d87373745faade1c803be")]
 [assembly: System.Reflection.AssemblyProductAttribute("Maxiprod.Application")]
 [assembly: System.Reflection.AssemblyTitleAttribute("Maxiprod.Application")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
