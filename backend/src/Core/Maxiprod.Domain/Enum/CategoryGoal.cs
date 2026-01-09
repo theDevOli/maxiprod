@@ -1,5 +1,7 @@
 namespace Maxiprod.Domain.Enum;
-
+/// <summary>
+/// Defines the goals for a category.
+/// </summary>
 [Flags]
 public enum CategoryGoal
 {
