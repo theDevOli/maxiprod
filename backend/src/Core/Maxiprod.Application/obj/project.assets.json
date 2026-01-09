@@ -32,11 +32,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "/home/daniel/Documents/maxiprod-challenge/backend/src/Core/Maxiprod.Application/Maxiprod.Application.csproj",
+      "projectUniqueName": "/home/daniel/Documents/maxiprod/backend/src/Core/Maxiprod.Application/Maxiprod.Application.csproj",
       "projectName": "Maxiprod.Application",
-      "projectPath": "/home/daniel/Documents/maxiprod-challenge/backend/src/Core/Maxiprod.Application/Maxiprod.Application.csproj",
+      "projectPath": "/home/daniel/Documents/maxiprod/backend/src/Core/Maxiprod.Application/Maxiprod.Application.csproj",
       "packagesPath": "/home/daniel/.nuget/packages/",
-      "outputPath": "/home/daniel/Documents/maxiprod-challenge/backend/src/Core/Maxiprod.Application/obj/",
+      "outputPath": "/home/daniel/Documents/maxiprod/backend/src/Core/Maxiprod.Application/obj/",
       "projectStyle": "PackageReference",
       "configFilePaths": [
         "/home/daniel/.nuget/NuGet/NuGet.Config"
@@ -52,8 +52,8 @@
         "net9.0": {
           "targetAlias": "net9.0",
           "projectReferences": {
-            "/home/daniel/Documents/maxiprod-challenge/backend/src/Core/Maxiprod.Domain/Maxiprod.Domain.csproj": {
-              "projectPath": "/home/daniel/Documents/maxiprod-challenge/backend/src/Core/Maxiprod.Domain/Maxiprod.Domain.csproj"
+            "/home/daniel/Documents/maxiprod/backend/src/Core/Maxiprod.Domain/Maxiprod.Domain.csproj": {
+              "projectPath": "/home/daniel/Documents/maxiprod/backend/src/Core/Maxiprod.Domain/Maxiprod.Domain.csproj"
             }
           }
         }

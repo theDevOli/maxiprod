@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "+xRk91DUJj4=",
+  "dgSpecHash": "M+0CNv6Hz+M=",
   "success": true,
-  "projectFilePath": "/home/daniel/Documents/maxiprod-challenge/backend/src/Core/Maxiprod.Domain/Maxiprod.Domain.csproj",
+  "projectFilePath": "/home/daniel/Documents/maxiprod/backend/src/Core/Maxiprod.Domain/Maxiprod.Domain.csproj",
   "expectedPackageFiles": [],
   "logs": []
 }

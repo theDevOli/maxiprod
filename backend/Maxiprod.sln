@@ -8,9 +8,6 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Maxiprod.UI", "src\External\Maxiprod.UI\Maxiprod.UI.csproj", "{28D66EE9-2EB4-D31A-DF86-964A0EB05382}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Core", "Core", "{66F47900-976F-496B-B28B-A29A1EABF0EE}"
-	ProjectSection(SolutionItems) = preProject
-		.gitignore = .gitignore
-	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Maxiprod.Domain", "src\Core\Maxiprod.Domain\Maxiprod.Domain.csproj", "{D38E56C5-B1C7-4E86-91F3-7C222E720CC3}"
 EndProject
