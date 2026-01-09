@@ -12,25 +12,25 @@ public class TransactionDtoUpsert
     /// The description of the transaction.
     /// This value is required and cannot be null or empty.
     /// </summary>
-    public string TransactionDescription { get; private set; } = default!;
+    public string TransactionDescription { get; set; } = default!;
 
     /// <summary>
     /// The amount of the transaction.
     /// </summary>
-    public decimal Amount { get; private set; }
+    public decimal Amount { get; set; }
 
     /// <summary>
     /// The type of the transaction ('despesa' or 'receita').
     /// </summary>
-    public TransactionType TransactionType { get; private set; }
+    public TransactionType TransactionType { get; set; }
 
     /// <summary>
     /// The identifier of the category linked with this transaction.
     /// </summary>
-    public int CategoryId { get; private set; }
+    public int CategoryId { get; set; }
 
     /// <summary>
     /// The identifier of the person who owns this transaction.
     /// </summary>
-    public int PeopleId { get; private set; }
+    public int PeopleId { get; set; }
 }

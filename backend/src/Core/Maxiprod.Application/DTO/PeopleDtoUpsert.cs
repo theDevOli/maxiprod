@@ -8,10 +8,10 @@ public class PeopleDtoUpsert
     /// <summary>
     /// The name of the person.
     /// </summary>
-    public string PersonName { get; private set; } = default!;
+    public string PersonName { get; set; } = default!;
 
     /// <summary>
     /// The age of the person.
     /// </summary>
-    public int Age { get; private set; }
+    public int Age { get; set; }
 }

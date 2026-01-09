@@ -9,10 +9,10 @@ public class CategoryDtoUpsert
     /// <summary>
     /// The description of the category.
     /// </summary>
-    public string CategoryDescription { get; private set; } = default!;
+    public string CategoryDescription { get; set; } = default!;
 
     /// <summary>
     /// The goal of the category ('despesa', 'receita', or 'ambos').
     /// </summary>
-    public CategoryGoal CategoryGoal { get; private set; }
+    public CategoryGoal CategoryGoal { get; set; }
 }
