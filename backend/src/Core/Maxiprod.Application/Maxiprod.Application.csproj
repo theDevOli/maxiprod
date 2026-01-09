@@ -1,0 +1,20 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net9.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="../Maxiprod.Domain/Maxiprod.Domain.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="DTO/" />
+    <Folder Include="Mapper/" />
+    <Folder Include="Services/" />
+    <Folder Include="ServicesContracts/" />
+  </ItemGroup>
+
+</Project>

@@ -1,0 +1,39 @@
+{
+  "runtimeTarget": {
+    "name": ".NETCoreApp,Version=v9.0",
+    "signature": ""
+  },
+  "compilationOptions": {},
+  "targets": {
+    ".NETCoreApp,Version=v9.0": {
+      "Maxiprod.Application/1.0.0": {
+        "dependencies": {
+          "Maxiprod.Domain": "1.0.0"
+        },
+        "runtime": {
+          "Maxiprod.Application.dll": {}
+        }
+      },
+      "Maxiprod.Domain/1.0.0": {
+        "runtime": {
+          "Maxiprod.Domain.dll": {
+            "assemblyVersion": "1.0.0",
+            "fileVersion": "1.0.0.0"
+          }
+        }
+      }
+    }
+  },
+  "libraries": {
+    "Maxiprod.Application/1.0.0": {
+      "type": "project",
+      "serviceable": false,
+      "sha512": ""
+    },
+    "Maxiprod.Domain/1.0.0": {
+      "type": "project",
+      "serviceable": false,
+      "sha512": ""
+    }
+  }
+}
