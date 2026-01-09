@@ -14,7 +14,7 @@ public class People
     /// Gets the person's name.
     /// This value is required and cannot be null or empty.
     /// </summary>
-    public string PersonName { get; private set; }= default!;
+    public string PersonName { get; private set; } = default!;
 
     /// <summary>
     /// Gets the person's age.
@@ -43,6 +43,25 @@ public class People
     /// </exception>
     public People(string personName, int age)
     {
+        ChangeName(personName);
+        ChangeAge(age);
+    }
+
+    /// <summary>
+    /// Initializes a new instance of the <see cref="People"/> class with an identifier.
+    /// </summary>
+    /// <param name="peopleId">
+    /// The unique identifier of the person.
+    /// </param>
+    /// <param name="personName">
+    /// The person's name.
+    /// </param>
+    /// <param name="age">
+    /// The person's age.
+    /// </param>
+    public People(int peopleId, string personName, int age)
+    {
+        PeopleId = peopleId;
         ChangeName(personName);
         ChangeAge(age);
     }

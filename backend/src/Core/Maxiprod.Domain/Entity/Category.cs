@@ -5,7 +5,7 @@ namespace Maxiprod.Domain.Entity;
 /// <summary>
 /// Represents a category used to classify financial transactions.
 /// A category defines the allowed purpose of a transaction
-/// (expense, income, or both).
+/// ('despesa','receita' or 'ambas).
 /// </summary>
 public class Category
 {
@@ -40,13 +40,32 @@ public class Category
     /// Must not be null, empty, or whitespace.
     /// </param>
     /// <param name="categoryGoal">
-    /// The goal of the category (expense, income, or both).
+    /// The goal of the category ('despesa','receita' or 'ambas).
     /// </param>
     /// <exception cref="ArgumentException">
     /// Thrown when <paramref name="categoryDescription"/> is null or empty.
     /// </exception>
     public Category(string categoryDescription, CategoryGoal categoryGoal)
     {
+        ChangeDescription(categoryDescription);
+        CategoryGoal = categoryGoal;
+    }
+
+    /// <summary>
+    /// Initializes a new instance of the <see cref="Category"/> class with an identifier.
+    /// </summary>
+    /// <param name="categoryId">
+    /// The unique identifier of the category
+    /// </param>
+    /// <param name="categoryDescription">
+    /// The description of the category.
+    /// </param>
+    /// <param name="categoryGoal">
+    /// The goal of the category ('despesa','receita' or 'ambas).
+    /// </param>
+    public Category(int categoryId, string categoryDescription, CategoryGoal categoryGoal)
+    {
+        CategoryId = categoryId;
         ChangeDescription(categoryDescription);
         CategoryGoal = categoryGoal;
     }
