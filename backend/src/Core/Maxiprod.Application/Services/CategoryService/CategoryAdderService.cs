@@ -23,6 +23,9 @@ public class CategoryAdderService(ICategoryRepository categoryRepository) : ICat
     {
         var category = dto.ToEntity();
 
+        var isUnique = await categoryRepository.IsCategoryUniqueAsync(category);
+        if (!isUnique) return -1;
+
         var categoryId = await categoryRepository.CreateCategoryAsync(category);
 
         return categoryId;

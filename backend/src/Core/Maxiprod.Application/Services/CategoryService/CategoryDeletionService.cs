@@ -22,6 +22,10 @@ public class CategoryDeletionService(ICategoryRepository categoryRepository) : I
     /// </returns>
     public async Task<bool> DeleteCategoryAsync(int categoryId)
     {
+        var doesExist = await categoryRepository.DoesCategoryExistsAsync(categoryId);
+
+        if (!doesExist) return false;
+        
         var isDeleted = await categoryRepository.DeleteCategoryAsync(categoryId);
 
         return isDeleted;

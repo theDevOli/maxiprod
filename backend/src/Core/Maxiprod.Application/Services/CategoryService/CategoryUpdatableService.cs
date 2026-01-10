@@ -27,6 +27,9 @@ public class CategoryUpdatableService(ICategoryRepository categoryRepository) : 
     /// </returns>
     public async Task<bool> UpdateCategoryAsync(int categoryId, CategoryDtoUpsert dto)
     {
+        var doesExist = await categoryRepository.DoesCategoryExistsAsync(categoryId);
+        if (!doesExist) return false;
+
         var category = dto.ToEntity(categoryId);
 
         var isUpdated = await categoryRepository.UpdateCategoryAsync(category);
