@@ -23,6 +23,11 @@ public class TransactionAdderService(ITransactionRepository transactionRepositor
     {
         var transaction = dto.ToEntity();
 
+        var isUnique = await transactionRepository.IsTransactionUniqueAsync(transaction);
+        
+        if (!isUnique)
+            return -1;
+
         var transactionId = await transactionRepository.CreateTransactionAsync(transaction);
 
         return transactionId;

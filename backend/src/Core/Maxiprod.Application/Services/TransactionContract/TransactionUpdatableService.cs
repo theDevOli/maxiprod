@@ -29,6 +29,11 @@ public class TransactionUpdatableService(ITransactionRepository transactionRepos
     /// </returns>
     public async Task<bool> UpdateTransactionAsync(int transactionId, TransactionDtoUpsert dto)
     {
+        var exists = await transactionRepository.DoesTransactionExistsAsync(dto.ToEntity(transactionId));
+
+        if (!exists)
+            return false;
+
         var transaction = dto.ToEntity(transactionId);
 
         var isUpdated = await transactionRepository.UpdateTransactionAsync(transaction);
