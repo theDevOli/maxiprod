@@ -62,7 +62,7 @@ public class Transaction
         int personId)
     {
         ChangeTransactionDescription(transactionDescription);
-        Amount = amount;
+        ChangeAmount(amount);
         ChangeTransactionType(transactionType);
         CategoryId = categoryId;
         PersonId = personId;
@@ -99,7 +99,7 @@ public class Transaction
     {
         TransactionId = transactionId;
         ChangeTransactionDescription(transactionDescription);
-        Amount = amount;
+        ChangeAmount(amount);
         ChangeTransactionType(transactionType);
         CategoryId = categoryId;
         PersonId = personId;
@@ -118,6 +118,14 @@ public class Transaction
         TransactionDescription = transactionDescription;
     }
 
+    public void ChangeAmount(decimal amount)
+    {
+        if (amount < 0)
+            throw new ArgumentException("Transaction description cannot be null or empty.");
+
+        Amount = amount;
+    }
+
     /// <summary>
     /// Changes the type of the transaction.
     /// </summary>
@@ -133,5 +141,13 @@ public class Transaction
             throw new ArgumentException("TransactionType is invalid.");
 
         TransactionType = transactionType;
+    }
+
+    public static Transaction CreateTransaction(string description, decimal amount, TransactionType transactionType, Person person, int categoryId)
+    {
+        if (!person.IsAdult && transactionType.ToString() != "despesa")
+            throw new InvalidOperationException("Only Adults (Age>=18) are allowed to insert 'receita'");
+
+        return new Transaction(description, amount, transactionType, person.PersonId, categoryId);
     }
 }
