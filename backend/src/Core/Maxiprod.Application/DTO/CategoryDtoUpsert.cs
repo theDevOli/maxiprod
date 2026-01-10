@@ -1,4 +1,4 @@
-using Maxiprod.Domain.Enum;
+using Maxiprod.Domain.ObjectValues;
 
 namespace Maxiprod.Application.DTO;
 /// <summary>

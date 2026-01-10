@@ -1,6 +1,6 @@
 ﻿using Maxiprod.Application.DTO;
 using Maxiprod.Domain.RepositoryContract;
-using Maxiprod.Domain.Enum;
+using Maxiprod.Domain.ObjectValues;
 using Moq;
 using Maxiprod.Domain.Entity;
 using Maxiprod.Application.Services.CategoryService;

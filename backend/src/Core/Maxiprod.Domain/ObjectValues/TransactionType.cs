@@ -1,10 +1,9 @@
-namespace Maxiprod.Domain.Enum;
+namespace Maxiprod.Domain.ObjectValues;
 /// <summary>
 /// Defines the types of transactions.
 /// </summary>
-[Flags]
 public enum TransactionType
 {
-    despesa = 0,
-    receita = 1 << 1
+    despesa,
+    receita
 }
