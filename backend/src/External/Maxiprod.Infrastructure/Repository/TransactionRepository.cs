@@ -19,7 +19,7 @@ public class TransactionRepository(DataContext dapper) : ITransactionRepository
     /// SQL query to get all transactions.
     /// </summary>
     private readonly string _getAllTransactionsQuery =
-    @$"""
+    $"""
         SELECT
             transaction_id AS {nameof(Transaction.TransactionId)},
             transaction_description AS {nameof(Transaction.TransactionDescription)},
@@ -28,14 +28,14 @@ public class TransactionRepository(DataContext dapper) : ITransactionRepository
             category_id AS {nameof(Transaction.CategoryId)},
             person_id AS {nameof(Transaction.PersonId)}
         FROM
-            transactions;
+            transaction;
     """;
 
     /// <summary>
     /// SQL query to get a transaction by its ID.
     /// </summary>
     private readonly string _getTransactionByTransactionIdQuery =
-    @$"""
+    $"""
         SELECT
             transaction_id AS {nameof(Transaction.TransactionId)},
             transaction_description AS {nameof(Transaction.TransactionDescription)},
@@ -44,7 +44,7 @@ public class TransactionRepository(DataContext dapper) : ITransactionRepository
             category_id AS {nameof(Transaction.CategoryId)},
             person_id AS {nameof(Transaction.PersonId)}
         FROM
-            transactions
+            transaction
         WHERE
             transaction_id = @{nameof(Transaction.TransactionId)};
     """;
@@ -53,7 +53,7 @@ public class TransactionRepository(DataContext dapper) : ITransactionRepository
     /// SQL query to get a unique transaction based on its properties.
     /// </summary>
     private readonly string _getUniqueTransactionQuery =
-    @$"""
+    $"""
         SELECT
             transaction_id AS {nameof(Transaction.TransactionId)},
             transaction_description AS {nameof(Transaction.TransactionDescription)},
@@ -62,7 +62,7 @@ public class TransactionRepository(DataContext dapper) : ITransactionRepository
             category_id AS {nameof(Transaction.CategoryId)},
             person_id AS {nameof(Transaction.PersonId)}
         FROM
-            transactions
+            transaction
         WHERE
             transaction_description = @{nameof(Transaction.TransactionDescription)} AND
             amount = @{nameof(Transaction.Amount)} AND
@@ -75,8 +75,8 @@ public class TransactionRepository(DataContext dapper) : ITransactionRepository
     /// SQL query to create a new transaction.
     /// </summary>
     private readonly string _createTransactionQuery =
-    @$"""
-        INSERT INTO transactions
+    $"""
+        INSERT INTO transaction
         (
             transaction_description,
             amount,
@@ -91,7 +91,7 @@ public class TransactionRepository(DataContext dapper) : ITransactionRepository
             @{nameof(Transaction.TransactionType)},
             @{nameof(Transaction.CategoryId)},
             @{nameof(Transaction.PersonId)}
-        );
+        )
         RETURNING transaction_id;
     """;
 
@@ -99,8 +99,8 @@ public class TransactionRepository(DataContext dapper) : ITransactionRepository
     /// SQL query to update an existing transaction.
     /// </summary>
     private readonly string _updateTransactionQuery =
-    @$"""
-        UPDATE transactions
+    $"""
+        UPDATE transaction
         SET
             transaction_description = @{nameof(Transaction.TransactionDescription)},
             amount = @{nameof(Transaction.Amount)},
@@ -115,8 +115,8 @@ public class TransactionRepository(DataContext dapper) : ITransactionRepository
     /// SQL query to delete a transaction by its ID.
     /// </summary>
     private readonly string _deleteTransactionQuery =
-    @$"""
-        DELETE FROM transactions
+    $"""
+        DELETE FROM transaction
         WHERE
             transaction_id = @{nameof(Transaction.TransactionId)};
     """;
@@ -171,6 +171,9 @@ public class TransactionRepository(DataContext dapper) : ITransactionRepository
     /// </returns>
     public async Task<bool> DoesTransactionExistsAsync(Transaction transaction)
     => await GetTransactionByIdAsync(transaction.TransactionId) is not null;
+
+    public async Task<bool> DoesTransactionExistsAsync(int transactionId)
+    => await GetTransactionByIdAsync(transactionId) is not null;
 
     /// <summary>
     /// Gets all transactions asynchronously.
