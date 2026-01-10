@@ -1,7 +1,7 @@
 using Maxiprod.Application.ServicesContracts.TransactionContracts;
 using Maxiprod.Domain.RepositoryContract;
 
-namespace Maxiprod.Application.Services.TransactionContract;
+namespace Maxiprod.Application.Services.TransactionService;
 
 /// <summary>
 /// Service responsible for deleting transactions.
@@ -22,6 +22,11 @@ public class TransactionDeletionService(ITransactionRepository transactionReposi
     /// </returns>
     public async Task<bool> DeleteTransactionAsync(int transactionId)
     {
+        var doesExist = await transactionRepository.DoesTransactionExistsAsync(transactionId);
+
+        if (!doesExist)
+            return false;
+
         var isDeleted = await transactionRepository.DeleteTransactionAsync(transactionId);
 
         return isDeleted;

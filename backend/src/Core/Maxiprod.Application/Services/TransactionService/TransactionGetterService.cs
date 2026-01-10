@@ -4,7 +4,7 @@ using Maxiprod.Application.ServicesContracts.TransactionContracts;
 using Maxiprod.Domain.Entity;
 using Maxiprod.Domain.RepositoryContract;
 
-namespace Maxiprod.Application.Services.TransactionContract;
+namespace Maxiprod.Application.Services.TransactionService;
 
 /// <summary>
 /// Service to get all transactions
@@ -14,13 +14,13 @@ namespace Maxiprod.Application.Services.TransactionContract;
 /// </param>
 public class TransactionGetterService(ITransactionRepository transactionRepository) : ITransactionGetterService
 {
-    
-/// <summary>
-/// Gets all transactions.
-/// </summary>
-/// <returns>
-/// A list of all transactions.
-/// </returns>
+
+    /// <summary>
+    /// Gets all transactions.
+    /// </summary>
+    /// <returns>
+    /// A list of all transactions.
+    /// </returns>
     public async Task<IEnumerable<Transaction>> GetAllTransactionsAsync()
     => await transactionRepository.GetAllTransactionsAsync();
 }

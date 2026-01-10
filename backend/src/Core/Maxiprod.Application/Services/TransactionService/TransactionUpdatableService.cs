@@ -5,7 +5,7 @@ using Maxiprod.Application.Mapper;
 using Maxiprod.Application.ServicesContracts.TransactionContracts;
 using Maxiprod.Domain.RepositoryContract;
 
-namespace Maxiprod.Application.Services.TransactionContract;
+namespace Maxiprod.Application.Services.TransactionService;
 
 /// <summary>
 /// Service for updating transactions.

@@ -4,7 +4,7 @@ using Maxiprod.Application.ServicesContracts.TransactionContracts;
 using Maxiprod.Domain.Entity;
 using Maxiprod.Domain.RepositoryContract;
 
-namespace Maxiprod.Application.Services.TransactionContract;
+namespace Maxiprod.Application.Services.TransactionService;
 
 /// <summary>
 /// Service to get a transaction by its identifier
