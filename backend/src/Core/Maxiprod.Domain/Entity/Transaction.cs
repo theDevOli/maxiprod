@@ -1,4 +1,4 @@
-using Maxiprod.Domain.Enum;
+using Maxiprod.Domain.ObjectValues;
 
 namespace Maxiprod.Domain.Entity;
 
@@ -36,7 +36,7 @@ public class Transaction
     /// <summary>
     /// The identifier of the person who owns this transaction.
     /// </summary>
-    public int PeopleId { get; private set; }
+    public int PersonId { get; private set; }
 
     /// <summary>
     /// Required by Dapper for object materialization.
@@ -50,7 +50,7 @@ public class Transaction
     /// <param name="amount">Monetary amount of the transaction.</param>
     /// <param name="transactionType">Type of the transaction (expense or revenue).</param>
     /// <param name="categoryId">Identifier of the related category.</param>
-    /// <param name="peopleId">Identifier of the related person.</param>
+    /// <param name="personId">Identifier of the related person.</param>
     /// <exception cref="ArgumentException">
     /// Thrown when the transaction description is null or empty.
     /// </exception>
@@ -59,13 +59,13 @@ public class Transaction
         decimal amount,
         TransactionType transactionType,
         int categoryId,
-        int peopleId)
+        int personId)
     {
         ChangeTransactionDescription(transactionDescription);
         Amount = amount;
-        TransactionType = transactionType;
+        ChangeTransactionType(transactionType);
         CategoryId = categoryId;
-        PeopleId = peopleId;
+        PersonId = personId;
     }
 
     /// <summary>
@@ -86,7 +86,7 @@ public class Transaction
     /// <param name="categoryId">
     /// The identifier of the category linked with this transaction.
     /// </param>
-    /// <param name="peopleId">
+    /// <param name="personId">
     /// The identifier of the person who owns this transaction.
     /// </param>
     public Transaction(
@@ -95,14 +95,14 @@ public class Transaction
         decimal amount,
         TransactionType transactionType,
         int categoryId,
-        int peopleId)
+        int personId)
     {
         TransactionId = transactionId;
         ChangeTransactionDescription(transactionDescription);
         Amount = amount;
-        TransactionType = transactionType;
+        ChangeTransactionType(transactionType);
         CategoryId = categoryId;
-        PeopleId = peopleId;
+        PersonId = personId;
     }
 
     /// <summary>
@@ -116,5 +116,22 @@ public class Transaction
             throw new ArgumentException("Transaction description cannot be null or empty.");
 
         TransactionDescription = transactionDescription;
+    }
+
+    /// <summary>
+    /// Changes the type of the transaction.
+    /// </summary>
+    /// <param name="transactionType">
+    /// The new type to assign to the transaction.
+    /// </param>
+    /// <exception cref="ArgumentException">
+    /// Thrown when the transaction type is invalid.
+    /// </exception>
+    public void ChangeTransactionType(TransactionType transactionType)
+    {
+        if (!Enum.IsDefined(typeof(TransactionType), transactionType))
+            throw new ArgumentException("TransactionType is invalid.");
+
+        TransactionType = transactionType;
     }
 }

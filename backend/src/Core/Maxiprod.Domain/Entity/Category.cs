@@ -1,4 +1,4 @@
-using Maxiprod.Domain.Enum;
+using Maxiprod.Domain.ObjectValues;
 
 namespace Maxiprod.Domain.Entity;
 
@@ -48,7 +48,7 @@ public class Category
     public Category(string categoryDescription, CategoryGoal categoryGoal)
     {
         ChangeDescription(categoryDescription);
-        CategoryGoal = categoryGoal;
+        ChangeCategoryGoal(categoryGoal);
     }
 
     /// <summary>
@@ -67,7 +67,7 @@ public class Category
     {
         CategoryId = categoryId;
         ChangeDescription(categoryDescription);
-        CategoryGoal = categoryGoal;
+        ChangeCategoryGoal(categoryGoal);
     }
 
     /// <summary>
@@ -86,5 +86,22 @@ public class Category
             throw new ArgumentException("Category name cannot be null or empty");
 
         CategoryDescription = categoryDescription;
+    }
+
+    /// <summary>
+    /// Changes the goal of the category.
+    /// </summary>
+    /// <param name="categoryGoal">
+    /// The new goal to assign to the category.
+    /// </param>
+    /// <exception cref="ArgumentException">
+    /// Thrown when the category goal is invalid.
+    /// </exception>
+    public void ChangeCategoryGoal(CategoryGoal categoryGoal)
+    {
+        if (!Enum.IsDefined(typeof(CategoryGoal), categoryGoal))
+            throw new ArgumentException("CategoryGoal is invalid.");
+
+        CategoryGoal = categoryGoal;
     }
 }
