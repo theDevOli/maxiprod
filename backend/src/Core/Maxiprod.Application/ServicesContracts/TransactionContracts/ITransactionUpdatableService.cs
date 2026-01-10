@@ -1,4 +1,4 @@
-using Maxiprod.Domain.Entity;
+using Maxiprod.Application.DTO;
 
 namespace Maxiprod.Application.ServicesContracts.TransactionContracts;
 
@@ -7,14 +7,18 @@ namespace Maxiprod.Application.ServicesContracts.TransactionContracts;
 /// </summary>
 public interface ITransactionUpdatableService
 {
+
     /// <summary>
-    /// Updates an existing transaction asynchronously.
+    /// Updates an existing transaction.
     /// </summary>
-    /// <param name="transaction">
-    /// The transaction to update.
+    /// <param name="transactionId">
+    /// The ID of the transaction to update.
+    /// </param>
+    /// <param name="dto">
+    /// The DTO containing the updated transaction data.
     /// </param>
     /// <returns>
     /// True if the transaction was updated successfully, otherwise false.
     /// </returns>
-    public Task<bool> UpdateTransactionAsync(Transaction transaction);
+    public Task<bool> UpdateTransactionAsync(int transactionId, TransactionDtoUpsert dto);
 }
