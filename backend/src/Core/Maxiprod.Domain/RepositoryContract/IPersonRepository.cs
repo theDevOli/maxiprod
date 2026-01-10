@@ -6,11 +6,13 @@ namespace Maxiprod.Domain.RepositoryContract;
 /// </summary>
 public interface IPersonRepository
 {
-    /// <summary>
-    /// Retrieves all person from the data source.
-    /// </summary>
-    /// <returns></returns>
-    public Task<IEnumerable<Person>> GetAllPersonAsync();
+/// <summary>
+/// Retrieves all people from the data source.
+/// </summary>
+/// <returns>
+/// A task that represents the asynchronous operation. The task result contains the list of all people.
+/// </returns>
+    public Task<IEnumerable<Person>> GetAllPeopleAsync();
 
     /// <summary>
     /// Retrieves a person by their unique identifier.
