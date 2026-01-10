@@ -1,4 +1,4 @@
-using Maxiprod.Domain.Entity;
+using Maxiprod.Application.DTO;
 
 namespace Maxiprod.Application.ServicesContracts.TransactionContracts;
 
@@ -9,13 +9,13 @@ public interface ITransactionAdderService
 {
 
     /// <summary>
-    /// Adds a new transaction asynchronously.
+    /// Adds a new transaction.
     /// </summary>
-    /// <param name="transaction">
-    /// The transaction to add.
+    /// <param name="dto">
+    /// The DTO containing the transaction data.
     /// </param>
     /// <returns>
     /// The ID of the newly added transaction.
     /// </returns>
-    public Task<int> AddTransactionAsync(Transaction transaction);
+    public Task<int> AddTransactionAsync(TransactionDtoUpsert dto);
 }
