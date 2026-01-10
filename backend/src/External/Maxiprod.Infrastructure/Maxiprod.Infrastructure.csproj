@@ -13,7 +13,13 @@
   <ItemGroup>
     <Folder Include="DbContext/" />
     <Folder Include="Extensions/" />
-    <Folder Include="Repositoriy/" />
+    <Folder Include="Repository/" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Dapper" Version="2.1.66" />
+    <PackageReference Include="Microsoft.Extensions.Configuration" Version="10.0.1" />
+    <PackageReference Include="Npgsql" Version="10.0.1" />
   </ItemGroup>
 
 </Project>
