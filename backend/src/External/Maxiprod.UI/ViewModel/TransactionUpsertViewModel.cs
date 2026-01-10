@@ -24,19 +24,19 @@ public class TransactionUpsertViewModel
     /// <summary>
     /// The type of the transaction ('despesa' or 'receita').
     /// </summary>
-    [Required(ErrorMessage = "Transaction type is required.")]
+     [Required(ErrorMessage = "Transaction type is required.")]
     public string TransactionType { get; set; } = default!;
 
     /// <summary>
     /// The identifier of the category linked with this transaction.
     /// </summary>
-    [Required(ErrorMessage = "CategoryId is required.")]
+     [Required(ErrorMessage = "CategoryId is required.")]
     public int CategoryId { get; set; }
 
     /// <summary>
     /// The identifier of the person who owns this transaction.
     /// </summary>
-    [Required(ErrorMessage = "PersonId is required.")]
+     [Required(ErrorMessage = "PersonId is required.")]
     public int PersonId { get; set; }
 
     /// <summary>
