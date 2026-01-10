@@ -22,6 +22,8 @@ public class Person
     /// </summary>
     public int Age { get; private set; }
 
+    public bool IsAdult => Age >= 18;
+
     /// <summary>
     /// Private constructor required by Dapper.
     /// </summary>
