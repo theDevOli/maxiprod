@@ -8,13 +8,10 @@ namespace Maxiprod.Application.ServicesContracts.PersonContracts;
 public interface IPersonGetterService
 {
     /// <summary>
-    /// Gets a person by ID asynchronously.
+    /// Gets all people asynchronously.
     /// </summary>
-    /// <param name="personId">
-    /// The ID of the person to retrieve.
-    /// </param>
     /// <returns>
-    /// A task that represents the asynchronous operation. The task result contains the person if found, otherwise null.
+    /// A task that represents the asynchronous operation. The task result contains the list of all people.
     /// </returns>
-    public Task<Person?> GetPersonByIdAsync(int personId);
+    public Task<IEnumerable<Person>> GetAllPeopleAsync();
 }
