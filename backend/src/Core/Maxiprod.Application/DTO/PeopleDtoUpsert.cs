@@ -3,7 +3,7 @@ namespace Maxiprod.Application.DTO;
 /// <summary>
 /// Data Transfer Object for upserting a person.
 /// </summary>
-public class PeopleDtoUpsert
+public class PersonDtoUpsert
 {
     /// <summary>
     /// The name of the person.

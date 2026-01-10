@@ -3,12 +3,12 @@ namespace Maxiprod.Domain.Entity;
 /// <summary>
 /// Represents a person in the system.
 /// </summary>
-public class People
+public class Person
 {
     /// <summary>
     /// The unique identifier of the person.
     /// </summary>
-    public int PeopleId { get; private set; }
+    public int PersonId { get; private set; }
 
     /// <summary>
     /// Gets the person's name.
@@ -25,10 +25,10 @@ public class People
     /// <summary>
     /// Private constructor required by Dapper.
     /// </summary>
-    private People() { }
+    private Person() { }
 
     /// <summary>
-    /// Initializes a new instance of the <see cref="People"/> class
+    /// Initializes a new instance of the <see cref="Person"/> class
     /// enforcing all domain invariants.
     /// </summary>
     /// <param name="personName">
@@ -41,16 +41,16 @@ public class People
     /// Thrown when <paramref name="personName"/> is invalid or
     /// <paramref name="age"/> is less than or equal to zero.
     /// </exception>
-    public People(string personName, int age)
+    public Person(string personName, int age)
     {
         ChangeName(personName);
         ChangeAge(age);
     }
 
     /// <summary>
-    /// Initializes a new instance of the <see cref="People"/> class with an identifier.
+    /// Initializes a new instance of the <see cref="Person"/> class with an identifier.
     /// </summary>
-    /// <param name="peopleId">
+    /// <param name="personId">
     /// The unique identifier of the person.
     /// </param>
     /// <param name="personName">
@@ -59,9 +59,9 @@ public class People
     /// <param name="age">
     /// The person's age.
     /// </param>
-    public People(int peopleId, string personName, int age)
+    public Person(int personId, string personName, int age)
     {
-        PeopleId = peopleId;
+        PersonId = personId;
         ChangeName(personName);
         ChangeAge(age);
     }

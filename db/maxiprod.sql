@@ -1,9 +1,9 @@
-DROP SEQUENCE IF EXISTS people_id_seq  CASCADE;
-CREATE SEQUENCE people_id_seq START 1;
+DROP SEQUENCE IF EXISTS person_id_seq  CASCADE;
+CREATE SEQUENCE person_id_seq START 1;
 
-DROP TABLE IF EXISTS people;
-CREATE TABLE people (
-    people_id               INT PRIMARY KEY DEFAULT nextval('people_id_seq'),
+DROP TABLE IF EXISTS person;
+CREATE TABLE person (
+    person_id               INT PRIMARY KEY DEFAULT nextval('person_id_seq'),
     person_name             VARCHAR(150) NOT NULL,
     age                     INTEGER NOT NULL
 );
@@ -29,5 +29,5 @@ CREATE TABLE transaction (
     transaction_type        VARCHAR(20) NOT NULL,
 
     category_id             INT REFERENCES category(category_id) NOT NULL,
-    people_id               INT REFERENCES people(people_id) NOT NULL
+    person_id               INT REFERENCES person(person_id) NOT NULL
 );

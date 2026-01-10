@@ -4,44 +4,48 @@ using Maxiprod.Domain.Entity;
 namespace Maxiprod.Application.Mapper;
 
 /// <summary>
-/// Mapper class for People entity and PeopleDtoUpsert DTO.
+/// Mapper class for Person entity and PersonDtoUpsert DTO.
 /// </summary>
-public static class PeopleMapper
+public static class PersonMapper
 {
     /// <summary>
-    /// Converts PeopleDtoUpsert DTO to People entity.
-    /// </summary>
-    /// <param name="dto"></param>
-    /// <returns></returns>
-    public static People ToEntity(this PeopleDtoUpsert dto)
-        => new People(dto.PersonName, dto.Age);
-
-    /// <summary>
-    /// Converts PeopleDtoUpsert DTO to People entity with a specified ID.
+    /// Converts PersonDtoUpsert DTO to Person entity.
     /// </summary>
     /// <param name="dto">
     /// The DTO containing the person name and age.
     /// </param>
-    /// <param name="peopleId">
-    /// The ID of the people to be created.
-    /// </param>
     /// <returns>
-    /// A new People entity with the specified ID.
+    /// A new Person entity with the specified values.
     /// </returns>
-    public static People ToEntity(this PeopleDtoUpsert dto, int peopleId)
-        => new People(peopleId, dto.PersonName, dto.Age);
+    public static Person ToEntity(this PersonDtoUpsert dto)
+        => new Person(dto.PersonName, dto.Age);
 
     /// <summary>
-    /// Converts People entity to PeopleDtoUpsert DTO.
+    /// Converts PersonDtoUpsert DTO to Person entity with a specified ID.
     /// </summary>
-    /// <param name="entity">
-    /// The People entity to be converted.
+    /// <param name="dto">
+    /// The DTO containing the person name and age.
+    /// </param>
+    /// <param name="personId">
+    /// The ID of the person to be created.
     /// </param>
     /// <returns>
-    /// A new PeopleDtoUpsert DTO with the specified values.
+    /// A new Person entity with the specified ID.
     /// </returns>
-    public static PeopleDtoUpsert ToDto(this People entity)
-    => new PeopleDtoUpsert
+    public static Person ToEntity(this PersonDtoUpsert dto, int personId)
+        => new Person(personId, dto.PersonName, dto.Age);
+
+    /// <summary>
+    /// Converts Person entity to PersonDtoUpsert DTO.
+    /// </summary>
+    /// <param name="entity">
+    /// The Person entity to be converted.
+    /// </param>
+    /// <returns>
+    /// A new PersonDtoUpsert DTO with the specified values.
+    /// </returns>
+    public static PersonDtoUpsert ToDto(this Person entity)
+    => new PersonDtoUpsert
     {
         PersonName = entity.PersonName,
         Age = entity.Age
