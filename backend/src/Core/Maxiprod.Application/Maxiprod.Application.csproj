@@ -14,7 +14,7 @@
     <Folder Include="DTO/" />
     <Folder Include="Mapper/" />
     <Folder Include="Services/CategoryService/" />
-    <Folder Include="Services/TransactionContract/" />
+    <Folder Include="Services/TransactionService/" />
     <Folder Include="ServicesContracts/TransactionContracts/" />
   </ItemGroup>
 
