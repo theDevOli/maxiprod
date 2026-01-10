@@ -38,6 +38,10 @@ public class CategoryServiceTests
         };
 
         _repositoryMock
+            .Setup(repo => repo.IsCategoryUniqueAsync(It.IsAny<Category>()))
+            .ReturnsAsync(true);
+
+        _repositoryMock
             .Setup(repo => repo.CreateCategoryAsync(It.IsAny<Category>()))
             .ReturnsAsync(1);
 
@@ -48,8 +52,42 @@ public class CategoryServiceTests
         Assert.Equal(1, result);
 
         _repositoryMock.Verify(
+            repo => repo.IsCategoryUniqueAsync(It.IsAny<Category>()),
+            Times.Once
+        );
+        _repositoryMock.Verify(
             repo => repo.CreateCategoryAsync(It.IsAny<Category>()),
             Times.Once
+        );
+    }
+
+    [Fact]
+    public async Task AddCategoryAsync_ShouldReturnMinusOne_WhenCategoryIsNotUnique()
+    {
+        // Arrange
+        var dto = new CategoryDtoUpsert
+        {
+            CategoryDescription = "Test Category",
+            CategoryGoal = CategoryGoal.despesa
+        };
+
+        _repositoryMock
+            .Setup(repo => repo.IsCategoryUniqueAsync(It.IsAny<Category>()))
+            .ReturnsAsync(false);
+
+        // Act
+        var result = await _adderService.AddCategoryAsync(dto);
+
+        // Assert
+        Assert.Equal(-1, result);
+
+        _repositoryMock.Verify(
+            repo => repo.IsCategoryUniqueAsync(It.IsAny<Category>()),
+            Times.Once
+        );
+        _repositoryMock.Verify(
+            repo => repo.CreateCategoryAsync(It.IsAny<Category>()),
+            Times.Never
         );
     }
 
@@ -62,6 +100,9 @@ public class CategoryServiceTests
             CategoryDescription = "Test Category",
             CategoryGoal = CategoryGoal.despesa
         };
+        _repositoryMock
+                    .Setup(repo => repo.IsCategoryUniqueAsync(It.IsAny<Category>()))
+                    .ReturnsAsync(true);
 
         _repositoryMock
             .Setup(repo => repo.CreateCategoryAsync(It.IsAny<Category>()))
@@ -70,6 +111,10 @@ public class CategoryServiceTests
         // Act & Assert
         await Assert.ThrowsAsync<Exception>(() => _adderService.AddCategoryAsync(dto));
 
+        _repositoryMock.Verify(
+            repo => repo.IsCategoryUniqueAsync(It.IsAny<Category>()),
+            Times.Once
+        );
         _repositoryMock.Verify(
             repo => repo.CreateCategoryAsync(It.IsAny<Category>()),
             Times.Once
@@ -92,6 +137,10 @@ public class CategoryServiceTests
         await Assert.ThrowsAsync<ArgumentException>(() => _adderService.AddCategoryAsync(dto));
 
         _repositoryMock.Verify(
+            repo => repo.IsCategoryUniqueAsync(It.IsAny<Category>()),
+            Times.Never
+        );
+        _repositoryMock.Verify(
             repo => repo.CreateCategoryAsync(It.IsAny<Category>()),
             Times.Never
         );
@@ -111,6 +160,10 @@ public class CategoryServiceTests
         await Assert.ThrowsAsync<ArgumentException>(() => _adderService.AddCategoryAsync(dto));
 
         _repositoryMock.Verify(
+            repo => repo.IsCategoryUniqueAsync(It.IsAny<Category>()),
+            Times.Never
+        );
+        _repositoryMock.Verify(
             repo => repo.CreateCategoryAsync(It.IsAny<Category>()),
             Times.Never
         );
@@ -123,7 +176,10 @@ public class CategoryServiceTests
         var categoryId = 1;
 
         _repositoryMock
-            .Setup(repo => repo.DeleteCategoryAsync(categoryId))
+            .Setup(repo => repo.DoesCategoryExistsAsync(It.IsAny<int>()))
+            .ReturnsAsync(true);
+        _repositoryMock
+            .Setup(repo => repo.DeleteCategoryAsync(It.IsAny<int>()))
             .ReturnsAsync(true);
 
         // Act
@@ -132,10 +188,8 @@ public class CategoryServiceTests
         // Assert
         Assert.True(result);
 
-        _repositoryMock.Verify(
-            repo => repo.DeleteCategoryAsync(categoryId),
-            Times.Once
-        );
+        _repositoryMock.Verify(repo => repo.DoesCategoryExistsAsync(It.IsAny<int>()), Times.Once);
+        _repositoryMock.Verify(repo => repo.DeleteCategoryAsync(It.IsAny<int>()), Times.Once);
     }
 
     [Fact]
@@ -144,6 +198,9 @@ public class CategoryServiceTests
         // Arrange
         var categoryId = 999;
 
+        _repositoryMock
+                .Setup(repo => repo.DoesCategoryExistsAsync(It.IsAny<int>()))
+                .ReturnsAsync(false);
         _repositoryMock
             .Setup(repo => repo.DeleteCategoryAsync(categoryId))
             .ReturnsAsync(false);
@@ -154,10 +211,8 @@ public class CategoryServiceTests
         // Assert
         Assert.False(result);
 
-        _repositoryMock.Verify(
-            repo => repo.DeleteCategoryAsync(categoryId),
-            Times.Once
-        );
+        _repositoryMock.Verify(repo => repo.DoesCategoryExistsAsync(It.IsAny<int>()), Times.Once);
+        _repositoryMock.Verify(repo => repo.DeleteCategoryAsync(It.IsAny<int>()), Times.Never);
     }
 
     [Fact]
@@ -167,6 +222,9 @@ public class CategoryServiceTests
         var categoryId = 1;
 
         _repositoryMock
+                .Setup(repo => repo.DoesCategoryExistsAsync(It.IsAny<int>()))
+                .ReturnsAsync(true);
+        _repositoryMock
             .Setup(repo => repo.DeleteCategoryAsync(categoryId))
             .ThrowsAsync(new Exception("Database error"));
 
@@ -175,10 +233,8 @@ public class CategoryServiceTests
             () => _deletionService.DeleteCategoryAsync(categoryId)
         );
 
-        _repositoryMock.Verify(
-            repo => repo.DeleteCategoryAsync(categoryId),
-            Times.Once
-        );
+        _repositoryMock.Verify(repo => repo.DoesCategoryExistsAsync(It.IsAny<int>()), Times.Once);
+        _repositoryMock.Verify(repo => repo.DeleteCategoryAsync(It.IsAny<int>()), Times.Once);
     }
 
     [Fact]
@@ -334,6 +390,9 @@ public class CategoryServiceTests
         };
 
         _repositoryMock
+            .Setup(repo => repo.DoesCategoryExistsAsync(It.IsAny<int>()))
+            .ReturnsAsync(true);
+        _repositoryMock
             .Setup(repo => repo.UpdateCategoryAsync(It.IsAny<Category>()))
             .ReturnsAsync(true);
 
@@ -343,16 +402,8 @@ public class CategoryServiceTests
         // Assert
         Assert.True(result);
 
-        _repositoryMock.Verify(
-            repo => repo.UpdateCategoryAsync(
-                It.Is<Category>(c =>
-                    c.CategoryId == categoryId &&
-                    c.CategoryDescription == dto.CategoryDescription &&
-                    c.CategoryGoal == dto.CategoryGoal
-                )
-            ),
-            Times.Once
-        );
+        _repositoryMock.Verify(repo => repo.DoesCategoryExistsAsync(It.IsAny<int>()), Times.Once);
+        _repositoryMock.Verify(repo => repo.UpdateCategoryAsync(It.IsAny<Category>()), Times.Once);
     }
 
     [Fact]
@@ -368,6 +419,9 @@ public class CategoryServiceTests
         };
 
         _repositoryMock
+            .Setup(repo => repo.DoesCategoryExistsAsync(It.IsAny<int>()))
+            .ReturnsAsync(false);
+        _repositoryMock
             .Setup(repo => repo.UpdateCategoryAsync(It.IsAny<Category>()))
             .ReturnsAsync(false);
 
@@ -377,16 +431,14 @@ public class CategoryServiceTests
         // Assert
         Assert.False(result);
 
-        _repositoryMock.Verify(
-            repo => repo.UpdateCategoryAsync(It.IsAny<Category>()),
-            Times.Once
-        );
+        _repositoryMock.Verify(repo => repo.DoesCategoryExistsAsync(It.IsAny<int>()), Times.Once);
+        _repositoryMock.Verify(repo => repo.UpdateCategoryAsync(It.IsAny<Category>()), Times.Never);
     }
 
     [Theory]
     [InlineData(null)]
     [InlineData("")]
-    public async Task UpdateCategoryAsync_ShouldReturnFalse_WhenCategoryDescriptionIsInvalid(string? categoryDescription)
+    public async Task UpdateCategoryAsync_ShouldThrowException_WhenCategoryDescriptionIsInvalid(string? categoryDescription)
     {
         // Arrange
         var categoryId = 1;
@@ -398,16 +450,17 @@ public class CategoryServiceTests
         };
 
         _repositoryMock
+                    .Setup(repo => repo.DoesCategoryExistsAsync(It.IsAny<int>()))
+                    .ReturnsAsync(true);
+        _repositoryMock
             .Setup(repo => repo.UpdateCategoryAsync(It.IsAny<Category>()))
             .ReturnsAsync(false);
 
         // Act & Assert
         await Assert.ThrowsAsync<ArgumentException>(() => _updatableService.UpdateCategoryAsync(categoryId, dto));
 
-        _repositoryMock.Verify(
-            repo => repo.UpdateCategoryAsync(It.IsAny<Category>()),
-            Times.Never
-        );
+        _repositoryMock.Verify(repo => repo.DoesCategoryExistsAsync(It.IsAny<int>()), Times.Once);
+        _repositoryMock.Verify(repo => repo.UpdateCategoryAsync(It.IsAny<Category>()), Times.Never);
     }
 
     [Fact]
@@ -421,13 +474,15 @@ public class CategoryServiceTests
             CategoryGoal = (CategoryGoal)999
         };
 
-        // Act & Assert
+        // Act 
+        _repositoryMock
+                    .Setup(repo => repo.DoesCategoryExistsAsync(It.IsAny<int>()))
+                    .ReturnsAsync(true);
+        // Assert
         await Assert.ThrowsAsync<ArgumentException>(() => _updatableService.UpdateCategoryAsync(categoryId, dto));
 
-        _repositoryMock.Verify(
-            repo => repo.UpdateCategoryAsync(It.IsAny<Category>()),
-            Times.Never
-        );
+        _repositoryMock.Verify(repo => repo.DoesCategoryExistsAsync(It.IsAny<int>()), Times.Once);
+        _repositoryMock.Verify(repo => repo.UpdateCategoryAsync(It.IsAny<Category>()), Times.Never);
     }
 
     [Fact]
@@ -443,6 +498,9 @@ public class CategoryServiceTests
         };
 
         _repositoryMock
+            .Setup(repo => repo.DoesCategoryExistsAsync(It.IsAny<int>()))
+            .ReturnsAsync(true);
+        _repositoryMock
             .Setup(repo => repo.UpdateCategoryAsync(It.IsAny<Category>()))
             .ThrowsAsync(new Exception("Database error"));
 
@@ -451,9 +509,7 @@ public class CategoryServiceTests
             () => _updatableService.UpdateCategoryAsync(categoryId, dto)
         );
 
-        _repositoryMock.Verify(
-            repo => repo.UpdateCategoryAsync(It.IsAny<Category>()),
-            Times.Once
-        );
+        _repositoryMock.Verify(repo => repo.DoesCategoryExistsAsync(It.IsAny<int>()), Times.Once);
+        _repositoryMock.Verify(repo => repo.UpdateCategoryAsync(It.IsAny<Category>()), Times.Once);
     }
 }
