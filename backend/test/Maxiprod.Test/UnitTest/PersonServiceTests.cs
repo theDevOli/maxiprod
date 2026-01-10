@@ -4,7 +4,7 @@ using Maxiprod.Domain.Entity;
 using Maxiprod.Domain.RepositoryContract;
 using Moq;
 
-namespace Maxiprod.Test;
+namespace Maxiprod.Test.UnitTest;
 
 public class PersonServiceTests
 {

@@ -5,7 +5,7 @@ using Moq;
 using Maxiprod.Domain.Entity;
 using Maxiprod.Application.Services.CategoryService;
 
-namespace Maxiprod.Test;
+namespace Maxiprod.Test.UnitTest;
 
 public class CategoryServiceTests
 {
@@ -104,7 +104,7 @@ public class CategoryServiceTests
         var dto = new CategoryDtoUpsert
         {
             CategoryDescription = "Test Category",
-            CategoryGoal = (CategoryGoal) 999
+            CategoryGoal = (CategoryGoal)999
         };
 
         // Act & Assert
@@ -410,7 +410,7 @@ public class CategoryServiceTests
         );
     }
 
-        [Fact]
+    [Fact]
     public async Task UpdateCategoryAsync_ShouldThrowException_WhenCategoryGoalIsInvalid()
     {
         // Arrange
@@ -418,7 +418,7 @@ public class CategoryServiceTests
         var dto = new CategoryDtoUpsert
         {
             CategoryDescription = "Test Category",
-            CategoryGoal = (CategoryGoal) 999
+            CategoryGoal = (CategoryGoal)999
         };
 
         // Act & Assert
