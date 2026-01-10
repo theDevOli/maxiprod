@@ -1,4 +1,4 @@
-using Maxiprod.Domain.Enum;
+using Maxiprod.Domain.ObjectValues;
 
 namespace Maxiprod.Application.DTO;
 
@@ -32,5 +32,5 @@ public class TransactionDtoUpsert
     /// <summary>
     /// The identifier of the person who owns this transaction.
     /// </summary>
-    public int PeopleId { get; set; }
+    public int PersonId { get; set; }
 }

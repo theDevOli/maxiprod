@@ -12,13 +12,13 @@ public static class TransactionMapper
     /// Converts TransactionDtoUpsert DTO to Transaction entity.
     /// </summary>
     /// <param name="dto">
-    /// The DTO containing the transaction description, amount, type, category ID, and people ID.
+    /// The DTO containing the transaction description, amount, type, category ID, and person ID.
     /// </param>
     /// <returns>
     /// A new Transaction entity with the specified values.
     /// </returns>
     public static Transaction ToEntity(this TransactionDtoUpsert dto)
-        => new Transaction(dto.TransactionDescription, dto.Amount, dto.TransactionType, dto.CategoryId, dto.PeopleId);
+        => new Transaction(dto.TransactionDescription, dto.Amount, dto.TransactionType, dto.CategoryId, dto.PersonId);
 
     /// <summary>
     /// Converts TransactionDtoUpsert DTO to Transaction entity with a specified ID.
@@ -33,7 +33,7 @@ public static class TransactionMapper
     /// A new Transaction entity with the specified values.
     /// </returns>
     public static Transaction ToEntity(this TransactionDtoUpsert dto, int transactionId)
-        => new Transaction(dto.TransactionDescription, dto.Amount, dto.TransactionType, dto.CategoryId, dto.PeopleId);
+        => new Transaction(dto.TransactionDescription, dto.Amount, dto.TransactionType, dto.CategoryId, dto.PersonId);
 
     /// <summary>
     /// Converts Transaction entity to TransactionDtoUpsert DTO.
@@ -51,6 +51,6 @@ public static class TransactionMapper
         Amount = entity.Amount,
         TransactionType = entity.TransactionType,
         CategoryId = entity.CategoryId,
-        PeopleId = entity.PeopleId
+        PersonId = entity.PersonId
     };
 }
