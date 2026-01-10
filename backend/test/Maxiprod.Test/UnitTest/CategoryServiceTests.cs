@@ -98,6 +98,25 @@ public class CategoryServiceTests
     }
 
     [Fact]
+    public async Task AddCategoryAsync_ShouldThrowException_WhenCategoryGoalIsInvalid()
+    {
+        // Arrange
+        var dto = new CategoryDtoUpsert
+        {
+            CategoryDescription = "Test Category",
+            CategoryGoal = (CategoryGoal) 999
+        };
+
+        // Act & Assert
+        await Assert.ThrowsAsync<ArgumentException>(() => _adderService.AddCategoryAsync(dto));
+
+        _repositoryMock.Verify(
+            repo => repo.CreateCategoryAsync(It.IsAny<Category>()),
+            Times.Never
+        );
+    }
+
+    [Fact]
     public async Task DeleteCategoryAsync_ShouldReturnTrue_WhenCategoryIsDeleted()
     {
         // Arrange
@@ -363,6 +382,7 @@ public class CategoryServiceTests
             Times.Once
         );
     }
+
     [Theory]
     [InlineData(null)]
     [InlineData("")]
@@ -380,6 +400,26 @@ public class CategoryServiceTests
         _repositoryMock
             .Setup(repo => repo.UpdateCategoryAsync(It.IsAny<Category>()))
             .ReturnsAsync(false);
+
+        // Act & Assert
+        await Assert.ThrowsAsync<ArgumentException>(() => _updatableService.UpdateCategoryAsync(categoryId, dto));
+
+        _repositoryMock.Verify(
+            repo => repo.UpdateCategoryAsync(It.IsAny<Category>()),
+            Times.Never
+        );
+    }
+
+        [Fact]
+    public async Task UpdateCategoryAsync_ShouldThrowException_WhenCategoryGoalIsInvalid()
+    {
+        // Arrange
+        var categoryId = 1;
+        var dto = new CategoryDtoUpsert
+        {
+            CategoryDescription = "Test Category",
+            CategoryGoal = (CategoryGoal) 999
+        };
 
         // Act & Assert
         await Assert.ThrowsAsync<ArgumentException>(() => _updatableService.UpdateCategoryAsync(categoryId, dto));
