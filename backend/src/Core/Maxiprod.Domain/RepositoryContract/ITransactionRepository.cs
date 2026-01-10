@@ -29,6 +29,29 @@ public interface ITransactionRepository
     public Task<Transaction?> GetTransactionByIdAsync(int transactionId);
 
     /// <summary>
+    /// Checks if a transaction exists in the data source.
+    /// </summary>
+    /// <param name="transaction">
+    /// The transaction to check.
+    /// </param>
+    /// <returns>
+    /// True if the transaction exists; otherwise, false.
+    /// </returns>
+    public Task<bool> DoesTransactionExistsAsync(Transaction transaction);
+
+/// <summary>
+/// Checks if a transaction is unique in the data source, based on
+/// TransactionDescription, Amount, TransactionType, CategoryId, and PersonId.
+/// </summary>
+/// <param name="transaction">
+/// The transaction to check.
+/// </param>
+/// <returns>
+/// True if the transaction is unique; otherwise, false.
+/// </returns>
+    public Task<bool> IsTransactionUniqueAsync(Transaction transaction);
+
+    /// <summary>
     /// Creates a new transaction in the data source.
     /// </summary>
     /// <param name="transaction">
