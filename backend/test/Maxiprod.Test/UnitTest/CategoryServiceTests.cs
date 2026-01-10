@@ -76,13 +76,15 @@ public class CategoryServiceTests
         );
     }
 
-    [Fact]
-    public async Task AddCategoryAsync_ShouldThrowException_WhenCategoryDescriptionIsInvalid()
+    [Theory]
+    [InlineData(null)]
+    [InlineData("")]
+    public async Task AddCategoryAsync_ShouldThrowException_WhenCategoryDescriptionIsInvalid(string? categoryDescription)
     {
         // Arrange
         var dto = new CategoryDtoUpsert
         {
-            CategoryDescription = "",
+            CategoryDescription = categoryDescription!,
             CategoryGoal = CategoryGoal.despesa
         };
 
@@ -359,6 +361,32 @@ public class CategoryServiceTests
         _repositoryMock.Verify(
             repo => repo.UpdateCategoryAsync(It.IsAny<Category>()),
             Times.Once
+        );
+    }
+    [Theory]
+    [InlineData(null)]
+    [InlineData("")]
+    public async Task UpdateCategoryAsync_ShouldReturnFalse_WhenCategoryDescriptionIsInvalid(string? categoryDescription)
+    {
+        // Arrange
+        var categoryId = 1;
+
+        var dto = new CategoryDtoUpsert
+        {
+            CategoryDescription = categoryDescription!,
+            CategoryGoal = CategoryGoal.despesa
+        };
+
+        _repositoryMock
+            .Setup(repo => repo.UpdateCategoryAsync(It.IsAny<Category>()))
+            .ReturnsAsync(false);
+
+        // Act & Assert
+        await Assert.ThrowsAsync<ArgumentException>(() => _updatableService.UpdateCategoryAsync(categoryId, dto));
+
+        _repositoryMock.Verify(
+            repo => repo.UpdateCategoryAsync(It.IsAny<Category>()),
+            Times.Never
         );
     }
 
