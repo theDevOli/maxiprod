@@ -1,5 +1,6 @@
 using Maxiprod.Application.DTO;
 using Maxiprod.Domain.Entity;
+using Maxiprod.Domain.ObjectValues;
 
 namespace Maxiprod.Application.Mapper;
 
@@ -33,8 +34,8 @@ public static class TransactionMapper
     /// A new Transaction entity with the specified values.
     /// </returns>
     public static Transaction ToEntity(this TransactionDtoUpsert dto, int transactionId)
-        => new Transaction(dto.TransactionDescription, dto.Amount, dto.TransactionType, dto.CategoryId, dto.PersonId);
-
+        => new Transaction(transactionId,dto.TransactionDescription, dto.Amount, dto.TransactionType, dto.CategoryId, dto.PersonId);
+    
     /// <summary>
     /// Converts Transaction entity to TransactionDtoUpsert DTO.
     /// </summary>

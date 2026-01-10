@@ -1,6 +1,6 @@
 using Maxiprod.Application.Services.CategoryService;
 using Maxiprod.Application.Services.PersonService;
-using Maxiprod.Application.Services.TransactionContract;
+using Maxiprod.Application.Services.TransactionService;
 using Maxiprod.Application.ServicesContracts.CategoryContracts;
 using Maxiprod.Application.ServicesContracts.PersonContracts;
 using Maxiprod.Application.ServicesContracts.TransactionContracts;

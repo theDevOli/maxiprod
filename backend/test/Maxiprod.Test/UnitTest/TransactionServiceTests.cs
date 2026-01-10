@@ -1,9 +1,10 @@
 using Maxiprod.Application.DTO;
-using Maxiprod.Application.Services.TransactionContract;
+using Maxiprod.Application.Services.TransactionService;
 using Maxiprod.Domain.Entity;
 using Maxiprod.Domain.ObjectValues;
 using Maxiprod.Domain.RepositoryContract;
 using Moq;
+using Xunit.Sdk;
 
 namespace Maxiprod.Test.UnitTest;
 
@@ -41,6 +42,10 @@ public class TransactionServiceTests
         };
 
         _repositoryMock
+            .Setup(repo => repo.IsTransactionUniqueAsync(It.IsAny<Transaction>()))
+            .ReturnsAsync(true);
+
+        _repositoryMock
             .Setup(repo => repo.CreateTransactionAsync(It.IsAny<Transaction>()))
             .ReturnsAsync(1);
 
@@ -51,11 +56,49 @@ public class TransactionServiceTests
         Assert.Equal(1, result);
 
         _repositoryMock.Verify(
+            repo => repo.IsTransactionUniqueAsync(It.IsAny<Transaction>()),
+            Times.Once
+        );
+
+        _repositoryMock.Verify(
             repo => repo.CreateTransactionAsync(It.IsAny<Transaction>()),
             Times.Once
         );
     }
 
+    [Fact]
+    public async Task AddTransactionAsync_ShouldReturnMinusOne_WhenTransitionIsNotUnique()
+    {
+        // Arrange
+        var dto = new TransactionDtoUpsert
+        {
+            TransactionDescription = "Test Transaction",
+            Amount = 100,
+            TransactionType = TransactionType.despesa,
+            CategoryId = 1,
+            PersonId = 1
+        };
+
+        _repositoryMock
+            .Setup(repo => repo.IsTransactionUniqueAsync(It.IsAny<Transaction>()))
+            .ReturnsAsync(false);
+
+        // Act
+        var result = await _adderService.AddTransactionAsync(dto);
+
+        //Assert
+        Equals(-1, result);
+
+        _repositoryMock.Verify(
+            repo => repo.IsTransactionUniqueAsync(It.IsAny<Transaction>()),
+            Times.Once
+        );
+
+        _repositoryMock.Verify(
+            repo => repo.CreateTransactionAsync(It.IsAny<Transaction>()),
+            Times.Never
+        );
+    }
     [Fact]
     public async Task AddTransactionAsync_ShouldThrowException_WhenRepositoryFails()
     {
@@ -70,12 +113,22 @@ public class TransactionServiceTests
         };
 
         _repositoryMock
+            .Setup(repo => repo.IsTransactionUniqueAsync(It.IsAny<Transaction>()))
+            .ReturnsAsync(true);
+
+        _repositoryMock
             .Setup(repo => repo.CreateTransactionAsync(It.IsAny<Transaction>()))
             .ThrowsAsync(new Exception("Database error"));
 
         // Act & Assert
         await Assert.ThrowsAsync<Exception>(
             () => _adderService.AddTransactionAsync(dto)
+        );
+
+
+        _repositoryMock.Verify(
+            repo => repo.IsTransactionUniqueAsync(It.IsAny<Transaction>()),
+            Times.Once
         );
 
         _repositoryMock.Verify(
@@ -100,6 +153,40 @@ public class TransactionServiceTests
             PersonId = 1
         };
 
+        // Act
+        _repositoryMock
+            .Setup(repo => repo.IsTransactionUniqueAsync(It.IsAny<Transaction>()))
+            .ReturnsAsync(true);
+
+        //  Assert
+        await Assert.ThrowsAsync<ArgumentException>(
+            () => _adderService.AddTransactionAsync(dto)
+        );
+
+
+        _repositoryMock.Verify(
+            repo => repo.IsTransactionUniqueAsync(It.IsAny<Transaction>()),
+            Times.Never
+        );
+        _repositoryMock.Verify(
+            repo => repo.CreateTransactionAsync(It.IsAny<Transaction>()),
+            Times.Never
+        );
+    }
+
+    [Fact]
+    public async Task AddTransactionAsync_ShouldThrowException_WhenAmountIsInvalid()
+    {
+        // Arrange
+        var dto = new TransactionDtoUpsert
+        {
+            TransactionDescription = "Test Transaction",
+            Amount = -100,
+            TransactionType = TransactionType.despesa,
+            CategoryId = 1,
+            PersonId = 1
+        };
+
         // Act & Assert
         await Assert.ThrowsAsync<ArgumentException>(
             () => _adderService.AddTransactionAsync(dto)
@@ -109,6 +196,11 @@ public class TransactionServiceTests
             repo => repo.CreateTransactionAsync(It.IsAny<Transaction>()),
             Times.Never
         );
+
+        _repositoryMock.Verify(
+        repo => repo.CreateTransactionAsync(It.IsAny<Transaction>()),
+        Times.Never
+);
     }
 
     [Fact]
@@ -133,6 +225,11 @@ public class TransactionServiceTests
             repo => repo.CreateTransactionAsync(It.IsAny<Transaction>()),
             Times.Never
         );
+
+        _repositoryMock.Verify(
+            repo => repo.CreateTransactionAsync(It.IsAny<Transaction>()),
+            Times.Never
+        );
     }
 
     [Fact]
@@ -140,6 +237,11 @@ public class TransactionServiceTests
     {
         // Arrange
         int transactionId = 1;
+
+        _repositoryMock
+            .Setup(repo => repo.DoesTransactionExistsAsync(It.IsAny<int>()))
+            .ReturnsAsync(true);
+
         _repositoryMock
             .Setup(repo => repo.DeleteTransactionAsync(transactionId))
             .ReturnsAsync(true);
@@ -149,7 +251,8 @@ public class TransactionServiceTests
 
         // Assert
         Assert.True(result);
-        _repositoryMock.Verify(repo => repo.DeleteTransactionAsync(transactionId), Times.Once);
+        _repositoryMock.Verify(repo => repo.DoesTransactionExistsAsync(It.IsAny<int>()), Times.Once);
+        _repositoryMock.Verify(repo => repo.DeleteTransactionAsync(It.IsAny<int>()), Times.Once);
     }
 
     [Fact]
@@ -157,8 +260,13 @@ public class TransactionServiceTests
     {
         // Arrange
         int transactionId = 2;
+
         _repositoryMock
-            .Setup(repo => repo.DeleteTransactionAsync(transactionId))
+            .Setup(repo => repo.DoesTransactionExistsAsync(It.IsAny<int>()))
+            .ReturnsAsync(false);
+
+        _repositoryMock
+            .Setup(repo => repo.DeleteTransactionAsync(It.IsAny<int>()))
             .ReturnsAsync(false);
 
         // Act
@@ -166,7 +274,8 @@ public class TransactionServiceTests
 
         // Assert
         Assert.False(result);
-        _repositoryMock.Verify(repo => repo.DeleteTransactionAsync(transactionId), Times.Once);
+        _repositoryMock.Verify(repo => repo.DoesTransactionExistsAsync(It.IsAny<int>()), Times.Once);
+        _repositoryMock.Verify(repo => repo.DeleteTransactionAsync(It.IsAny<int>()), Times.Never);
     }
 
     [Fact]
@@ -174,12 +283,19 @@ public class TransactionServiceTests
     {
         // Arrange
         int transactionId = 3;
+
+        _repositoryMock
+            .Setup(repo => repo.DoesTransactionExistsAsync(It.IsAny<int>()))
+            .ReturnsAsync(true);
+
         _repositoryMock
             .Setup(repo => repo.DeleteTransactionAsync(transactionId))
             .ThrowsAsync(new Exception("Database error"));
 
         // Act & Assert
         await Assert.ThrowsAsync<Exception>(() => _deletionService.DeleteTransactionAsync(transactionId));
+
+        _repositoryMock.Verify(repo => repo.DoesTransactionExistsAsync(It.IsAny<int>()), Times.Once);
         _repositoryMock.Verify(repo => repo.DeleteTransactionAsync(transactionId), Times.Once);
     }
 
@@ -188,7 +304,7 @@ public class TransactionServiceTests
     {
         // Arrange
         int transactionId = 1;
-        var transaction = new Transaction(transactionId, "Sample Transaction", -100, TransactionType.despesa, 1, 1);
+        var transaction = new Transaction(transactionId, "Sample Transaction", 100, TransactionType.despesa, 1, 1);
 
         _repositoryMock
             .Setup(repo => repo.GetTransactionByIdAsync(transactionId))
@@ -241,7 +357,7 @@ public class TransactionServiceTests
         // Arrange
         var transactions = new List<Transaction>
             {
-                new Transaction(1, "Sample Transaction 1", -100, TransactionType.despesa, 1, 1),
+                new Transaction(1, "Sample Transaction 1", 100, TransactionType.despesa, 1, 1),
                 new Transaction(2, "Sample Transaction 2", 200, TransactionType.receita, 1, 1)
             };
 
@@ -304,6 +420,10 @@ public class TransactionServiceTests
         };
 
         _repositoryMock
+            .Setup(repo => repo.DoesTransactionExistsAsync(It.IsAny<Transaction>()))
+            .ReturnsAsync(true);
+
+        _repositoryMock
             .Setup(repo => repo.UpdateTransactionAsync(It.IsAny<Transaction>()))
             .ReturnsAsync(true);
 
@@ -312,6 +432,8 @@ public class TransactionServiceTests
 
         // Assert
         Assert.True(result);
+
+        _repositoryMock.Verify(repo => repo.DoesTransactionExistsAsync(It.IsAny<Transaction>()), Times.Once);
         _repositoryMock.Verify(repo => repo.UpdateTransactionAsync(It.IsAny<Transaction>()), Times.Once);
     }
 
@@ -330,6 +452,10 @@ public class TransactionServiceTests
         };
 
         _repositoryMock
+                    .Setup(repo => repo.DoesTransactionExistsAsync(It.IsAny<Transaction>()))
+                    .ReturnsAsync(false);
+
+        _repositoryMock
             .Setup(repo => repo.UpdateTransactionAsync(It.IsAny<Transaction>()))
             .ReturnsAsync(false);
 
@@ -338,14 +464,16 @@ public class TransactionServiceTests
 
         // Assert
         Assert.False(result);
-        _repositoryMock.Verify(repo => repo.UpdateTransactionAsync(It.IsAny<Transaction>()), Times.Once);
+
+        _repositoryMock.Verify(repo => repo.DoesTransactionExistsAsync(It.IsAny<Transaction>()), Times.Once);
+        _repositoryMock.Verify(repo => repo.UpdateTransactionAsync(It.IsAny<Transaction>()), Times.Never);
     }
 
 
     [Theory]
     [InlineData(null)]
     [InlineData("")]
-    public async Task UpdateTransactionAsync_ShouldThrowException_WhenTransactionDescriptionIsInvalid(string?transactionDescription)
+    public async Task UpdateTransactionAsync_ShouldThrowException_WhenTransactionDescriptionIsInvalid(string? transactionDescription)
     {
         // Arrange
         int transactionId = 3;
@@ -360,6 +488,28 @@ public class TransactionServiceTests
 
         // Act & Assert
         await Assert.ThrowsAsync<ArgumentException>(() => _updatableService.UpdateTransactionAsync(transactionId, dto));
+
+        _repositoryMock.Verify(repo => repo.DoesTransactionExistsAsync(It.IsAny<Transaction>()), Times.Never);
+        _repositoryMock.Verify(repo => repo.UpdateTransactionAsync(It.IsAny<Transaction>()), Times.Never);
+    }
+    [Fact]
+    public async Task UpdateTransactionAsync_ShouldThrowException_WhenAmountIsInvalid()
+    {
+        // Arrange
+        int transactionId = 3;
+        var dto = new TransactionDtoUpsert
+        {
+            TransactionDescription = "Test Transaction",
+            Amount = -100,
+            TransactionType = TransactionType.receita,
+            CategoryId = 2,
+            PersonId = 1
+        };
+
+        // Act & Assert
+        await Assert.ThrowsAsync<ArgumentException>(() => _updatableService.UpdateTransactionAsync(transactionId, dto));
+
+        _repositoryMock.Verify(repo => repo.DoesTransactionExistsAsync(It.IsAny<Transaction>()), Times.Never);
         _repositoryMock.Verify(repo => repo.UpdateTransactionAsync(It.IsAny<Transaction>()), Times.Never);
     }
 
@@ -372,13 +522,15 @@ public class TransactionServiceTests
         {
             TransactionDescription = "Updated transaction",
             Amount = 100,
-            TransactionType = (TransactionType) 999,
+            TransactionType = (TransactionType)999,
             CategoryId = 2,
             PersonId = 1
         };
 
         // Act & Assert
         await Assert.ThrowsAsync<ArgumentException>(() => _updatableService.UpdateTransactionAsync(transactionId, dto));
+
+        _repositoryMock.Verify(repo => repo.DoesTransactionExistsAsync(It.IsAny<Transaction>()), Times.Never);
         _repositoryMock.Verify(repo => repo.UpdateTransactionAsync(It.IsAny<Transaction>()), Times.Never);
     }
 
@@ -397,11 +549,17 @@ public class TransactionServiceTests
         };
 
         _repositoryMock
+                .Setup(repo => repo.DoesTransactionExistsAsync(It.IsAny<Transaction>()))
+                .ReturnsAsync(true);
+
+        _repositoryMock
             .Setup(repo => repo.UpdateTransactionAsync(It.IsAny<Transaction>()))
             .ThrowsAsync(new Exception("Database error"));
 
         // Act & Assert
         await Assert.ThrowsAsync<Exception>(() => _updatableService.UpdateTransactionAsync(transactionId, dto));
+
+        _repositoryMock.Verify(repo => repo.DoesTransactionExistsAsync(It.IsAny<Transaction>()), Times.Once);
         _repositoryMock.Verify(repo => repo.UpdateTransactionAsync(It.IsAny<Transaction>()), Times.Once);
     }
 }
