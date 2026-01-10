@@ -5,6 +5,7 @@ using Maxiprod.Application.ServicesContracts.CategoryContracts;
 using Maxiprod.Application.ServicesContracts.PersonContracts;
 using Maxiprod.Application.ServicesContracts.TransactionContracts;
 using Maxiprod.Domain.RepositoryContract;
+using Maxiprod.Infrastructure.DbContext;
 using Maxiprod.Infrastructure.Repository;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -76,7 +77,10 @@ public static class ServiceCollectionExtensions
     public static IServiceCollection AddInfrastructure(this IServiceCollection services)
     {
         services.AddRepositories();
+
         services.AddServices();
+
+        services.AddScoped<DataContext>();
 
         return services;
     }
