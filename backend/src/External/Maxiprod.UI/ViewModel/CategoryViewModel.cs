@@ -28,7 +28,6 @@ public class CategoryViewModel
     /// Indicates whether the category is intended for expenses, income, or both.
     /// </summary>
     [Required(ErrorMessage = "CategoryGoal is required")]
-    [EnumDataType(typeof(CategoryGoal), ErrorMessage = $"Invalid category goal!")]
     public string CategoryGoal { get; set; } = default!;
 
     /// <summary>

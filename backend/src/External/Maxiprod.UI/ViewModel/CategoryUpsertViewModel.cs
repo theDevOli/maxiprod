@@ -29,7 +29,6 @@ public class CategoryUpsertViewModel
     /// The value must match one of the defined <see cref="CategoryGoal"/> enum values.
     /// </remarks>
     [Required(ErrorMessage = "CategoryGoal is required")]
-    [EnumDataType(typeof(CategoryGoal), ErrorMessage = "Invalid category goal.")]
     public string CategoryGoal { get; set; } = default!;
 
     /// <summary>
