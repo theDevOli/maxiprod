@@ -1,20 +1,32 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
 
-namespace Maxiprod.UI.Filters;
-
-public class DomainExceptionFilter : IExceptionFilter
+namespace Maxiprod.UI.Filters
 {
-    public void OnException(ExceptionContext context)
+    /// <summary>
+    /// Exception filter that handles domain-specific exceptions and returns appropriate HTTP responses.
+    /// </summary>
+    /// <remarks>
+    /// Currently, it handles <see cref="ArgumentException"/> and returns a 400 Bad Request
+    /// with the exception message as the response body.
+    /// </remarks>
+    public class DomainExceptionFilter : IExceptionFilter
     {
-        if (context.Exception is ArgumentException)
+        /// <summary>
+        /// Called when an exception is thrown during the execution of an action.
+        /// </summary>
+        /// <param name="context">The context in which the exception occurred.</param>
+        public void OnException(ExceptionContext context)
         {
-            context.Result = new BadRequestObjectResult(new
+            if (context.Exception is ArgumentException)
             {
-                error = context.Exception.Message
-            });
+                context.Result = new BadRequestObjectResult(new
+                {
+                    error = context.Exception.Message
+                });
 
-            context.ExceptionHandled = true;
+                context.ExceptionHandled = true;
+            }
         }
     }
 }
