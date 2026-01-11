@@ -71,9 +71,10 @@ public class TransactionsController
     {
         var dto = TransactionUpsertViewModel.ToTransactionDto(viewModel);
         var transactionId = await transactionAdderService.AddTransactionAsync(dto);
-
-        if (transactionId == -1)
-            return Conflict("A transaction with the same details already exists.");
+        
+        // FIXME: I would try to avoid unnecessary data copy on the db, but it's out of scope.
+        // if (transactionId == -1)
+        //     return Conflict("A transaction with the same details already exists.");
 
         return CreatedAtRoute(
             "GetTransactionById",
