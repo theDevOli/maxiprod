@@ -16,4 +16,8 @@
     <ProjectReference Include="../Maxiprod.Infrastructure/Maxiprod.Infrastructure.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Filters/" />
+  </ItemGroup>
+
 </Project>
