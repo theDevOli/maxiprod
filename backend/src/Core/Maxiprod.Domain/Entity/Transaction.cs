@@ -3,56 +3,71 @@ using Maxiprod.Domain.ObjectValues;
 namespace Maxiprod.Domain.Entity;
 
 /// <summary>
-/// Represents a financial transaction.
+/// Represents a financial transaction in the domain.
+/// A transaction can be an expense or income and must obey
+/// domain business rules.
 /// </summary>
 public class Transaction
 {
     /// <summary>
-    /// The unique identifier of the transaction.
+    /// Gets the unique identifier of the transaction.
     /// </summary>
     public int TransactionId { get; private set; }
 
     /// <summary>
-    /// The description of the transaction.
+    /// Gets the description of the transaction.
     /// This value is required and cannot be null or empty.
     /// </summary>
     public string TransactionDescription { get; private set; } = default!;
 
     /// <summary>
-    /// The amount of the transaction.
+    /// Gets the monetary amount of the transaction.
     /// </summary>
     public decimal Amount { get; private set; }
 
     /// <summary>
-    /// The type of the transaction ('despesa' or 'receita').
+    /// Gets the type of the transaction (expense or income).
     /// </summary>
     public TransactionType TransactionType { get; private set; }
 
     /// <summary>
-    /// The identifier of the category linked with this transaction.
+    /// Gets the identifier of the category associated with this transaction.
     /// </summary>
     public int CategoryId { get; private set; }
 
     /// <summary>
-    /// The identifier of the person who owns this transaction.
+    /// Gets the identifier of the person who owns this transaction.
     /// </summary>
     public int PersonId { get; private set; }
 
     /// <summary>
+    /// Initializes a new instance of the <see cref="Transaction"/> class.
     /// Required by Dapper for object materialization.
     /// </summary>
     private Transaction() { }
 
     /// <summary>
-    /// Initializes a new instance of the <see cref="Transaction"/> class with the required data.
+    /// Initializes a new instance of the <see cref="Transaction"/> class
+    /// with the required data.
     /// </summary>
-    /// <param name="transactionDescription">Description of the transaction.</param>
-    /// <param name="amount">Monetary amount of the transaction.</param>
-    /// <param name="transactionType">Type of the transaction (expense or revenue).</param>
-    /// <param name="categoryId">Identifier of the related category.</param>
-    /// <param name="personId">Identifier of the related person.</param>
+    /// <param name="transactionDescription">
+    /// Description of the transaction.
+    /// </param>
+    /// <param name="amount">
+    /// Monetary amount of the transaction.
+    /// </param>
+    /// <param name="transactionType">
+    /// Type of the transaction (expense or income).
+    /// </param>
+    /// <param name="categoryId">
+    /// Identifier of the related category.
+    /// </param>
+    /// <param name="personId">
+    /// Identifier of the related person.
+    /// </param>
     /// <exception cref="ArgumentException">
-    /// Thrown when the transaction description is null or empty.
+    /// Thrown when the description is null or empty,
+    /// or when the amount or transaction type is invalid.
     /// </exception>
     public Transaction(
         string transactionDescription,
@@ -69,7 +84,8 @@ public class Transaction
     }
 
     /// <summary>
-    /// Initializes a new instance of the <see cref="Transaction"/> class with an identifier.
+    /// Initializes a new instance of the <see cref="Transaction"/> class
+    /// with an existing identifier.
     /// </summary>
     /// <param name="transactionId">
     /// The unique identifier of the transaction.
@@ -78,24 +94,26 @@ public class Transaction
     /// Description of the transaction.
     /// </param>
     /// <param name="amount">
-    /// The monetary amount of the transaction.
+    /// Monetary amount of the transaction.
     /// </param>
     /// <param name="transactionType">
-    /// The type of the transaction.
+    /// Type of the transaction.
     /// </param>
     /// <param name="categoryId">
-    /// The identifier of the category linked with this transaction.
+    /// Identifier of the related category.
     /// </param>
     /// <param name="personId">
-    /// The identifier of the person who owns this transaction.
+    /// Identifier of the related person.
     /// </param>
-    public Transaction(
+    public Transaction
+    (
         int transactionId,
         string transactionDescription,
         decimal amount,
         TransactionType transactionType,
         int categoryId,
-        int personId)
+        int personId
+    )
     {
         TransactionId = transactionId;
         ChangeTransactionDescription(transactionDescription);
@@ -106,10 +124,14 @@ public class Transaction
     }
 
     /// <summary>
-    /// Changes the description of the transaction.
+    /// Changes the transaction description.
     /// </summary>
-    /// <param name="transactionDescription"></param>
-    /// <exception cref="ArgumentException"></exception>
+    /// <param name="transactionDescription">
+    /// The new description to assign.
+    /// </param>
+    /// <exception cref="ArgumentException">
+    /// Thrown when the description is null, empty, or whitespace.
+    /// </exception>
     public void ChangeTransactionDescription(string transactionDescription)
     {
         if (string.IsNullOrWhiteSpace(transactionDescription))
@@ -118,36 +140,77 @@ public class Transaction
         TransactionDescription = transactionDescription;
     }
 
+    /// <summary>
+    /// Changes the transaction amount.
+    /// </summary>
+    /// <param name="amount">
+    /// The new monetary amount.
+    /// </param>
+    /// <exception cref="ArgumentException">
+    /// Thrown when the amount is negative.
+    /// </exception>
     public void ChangeAmount(decimal amount)
     {
         if (amount < 0)
-            throw new ArgumentException("Transaction description cannot be null or empty.");
+            throw new ArgumentException("Transaction amount cannot be negative.");
 
         Amount = amount;
     }
 
     /// <summary>
-    /// Changes the type of the transaction.
+    /// Changes the transaction type.
     /// </summary>
     /// <param name="transactionType">
-    /// The new type to assign to the transaction.
+    /// The new transaction type.
     /// </param>
     /// <exception cref="ArgumentException">
-    /// Thrown when the transaction type is invalid.
+    /// Thrown when the transaction type is not a valid enum value.
     /// </exception>
     public void ChangeTransactionType(TransactionType transactionType)
     {
         if (!Enum.IsDefined(typeof(TransactionType), transactionType))
-            throw new ArgumentException("TransactionType is invalid.");
+            throw new ArgumentException("Transaction type is invalid.");
 
         TransactionType = transactionType;
     }
 
-    public static Transaction CreateTransaction(string description, decimal amount, TransactionType transactionType, Person person, int categoryId)
+    /// <summary>
+    /// Creates a transaction while enforcing domain business rules.
+    /// </summary>
+    /// <param name="description">
+    /// Description of the transaction.
+    /// </param>
+    /// <param name="amount">
+    /// Monetary amount of the transaction.
+    /// </param>
+    /// <param name="transactionType">
+    /// Type of the transaction.
+    /// </param>
+    /// <param name="person">
+    /// The person associated with the transaction.
+    /// </param>
+    /// <param name="categoryId">
+    /// Identifier of the category.
+    /// </param>
+    /// <returns>
+    /// A valid <see cref="Transaction"/> instance.
+    /// </returns>
+    /// <exception cref="InvalidOperationException">
+    /// Thrown when a minor attempts to create an income transaction.
+    /// </exception>
+    public static Transaction CreateTransaction(
+        string description,
+        decimal amount,
+        TransactionType transactionType,
+        Person person,
+        Category category)
     {
-        if (!person.IsAdult && transactionType.ToString() != "despesa")
-            throw new InvalidOperationException("Only Adults (Age>=18) are allowed to insert 'receita'");
+        if (person.Age < 18 && transactionType == TransactionType.receita)
+            throw new ArgumentException("Only adults (Age >= 18) are allowed to insert income transactions.");
 
-        return new Transaction(description, amount, transactionType, person.PersonId, categoryId);
+        if (category.CategoryGoal != CategoryGoal.ambas && category.CategoryGoal != (CategoryGoal)transactionType)
+            throw new ArgumentException($"Category goal ({category.CategoryGoal}) differs from transaction type ({transactionType})");
+
+        return new Transaction(description, amount, transactionType, category.CategoryId, person.PersonId);
     }
 }
