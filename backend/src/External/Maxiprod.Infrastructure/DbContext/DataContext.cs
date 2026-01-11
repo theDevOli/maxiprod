@@ -95,6 +95,14 @@ public class DataContext
         return await dbConnection.QueryFirstOrDefaultAsync<T>(sql, parameters, transaction);
     }
 
+    /// <summary>
+    /// Executes a SQL command that does not return a result set.
+    /// </summary>
+    /// <param name="sql">SQL query to execute.</param>
+    /// <param name="parameters">Query parameters (optional).</param>
+    /// <param name="transaction">Transaction to use (optional).</param>
+    /// <returns>True if any rows were affected; otherwise, false.</returns>
+
     public async Task<bool> ExecuteSqlAsync(string sql, DynamicParameters? parameters = null, IDbTransaction? transaction = null)
     {
         using var dbConnection = CreateConnection();
