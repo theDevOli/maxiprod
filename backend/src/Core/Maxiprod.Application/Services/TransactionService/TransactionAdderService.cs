@@ -1,6 +1,4 @@
-using System.Diagnostics.CodeAnalysis;
 using Maxiprod.Application.DTO;
-using Maxiprod.Application.Mapper;
 using Maxiprod.Application.ServicesContracts.TransactionContracts;
 using Maxiprod.Domain.Entity;
 using Maxiprod.Domain.RepositoryContract;
@@ -29,22 +27,19 @@ public class TransactionAdderService
     /// </returns>
     public async Task<int> AddTransactionAsync(TransactionDtoUpsert dto)
     {
-        var tempTransaction = dto.ToEntity();
-
-        var isUnique = transactionRepository.IsTransactionUniqueAsync(tempTransaction);
+        // FIXME: I would try to avoid unnecessary data copy on the db, but it's out of scope.
+        // var isUnique = transactionRepository.IsTransactionUniqueAsync(tempTransaction);
         var personTask = personRepository.GetPersonByIdAsync(dto.PersonId);
         var categoryTask = categoryRepository.GetCategoryByIdAsync(dto.CategoryId);
 
-        await Task.WhenAll(isUnique, personTask, categoryTask);
+        // await Task.WhenAll(isUnique, personTask, categoryTask);
+        await Task.WhenAll( personTask, categoryTask);
 
-
-
-        // var isUnique = await transactionRepository.IsTransactionUniqueAsync(transaction);
         var category = categoryTask.Result;
         var person = personTask.Result;
 
-        if (!isUnique.Result)
-            return -1;
+        // if (!isUnique.Result)
+        //     return -1;
 
         if (category is null)
             throw new ArgumentException($"There is no such category with ID: {dto.CategoryId} no the data base!");
