@@ -26,6 +26,9 @@ public class PersonUpdatableService(IPersonRepository personRepository) : IPerso
     /// </returns>
     public async Task<bool> UpdatePersonAsync(int personId, PersonDtoUpsert dto)
     {
+        var doesExist = await personRepository.DoesPersonExistAsync(personId);
+        if (!doesExist) return false;
+
         var person = dto.ToEntity(personId);
 
         var isUpdated = await personRepository.UpdatePersonAsync(person);

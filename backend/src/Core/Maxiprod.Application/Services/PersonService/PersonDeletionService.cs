@@ -22,6 +22,10 @@ public class PersonDeletionService(IPersonRepository personRepository) : IPerson
     /// </returns>
     public async Task<bool> DeletePersonAsync(int personId)
     {
+        var doesExist = await personRepository.DoesPersonExistAsync(personId);
+
+        if (!doesExist) return false;
+
         var isDeleted = await personRepository.DeletePersonAsync(personId);
 
         return isDeleted;

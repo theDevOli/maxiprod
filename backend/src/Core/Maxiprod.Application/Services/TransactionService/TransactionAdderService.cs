@@ -1,6 +1,8 @@
+using System.Diagnostics.CodeAnalysis;
 using Maxiprod.Application.DTO;
 using Maxiprod.Application.Mapper;
 using Maxiprod.Application.ServicesContracts.TransactionContracts;
+using Maxiprod.Domain.Entity;
 using Maxiprod.Domain.RepositoryContract;
 
 namespace Maxiprod.Application.Services.TransactionService;
@@ -8,7 +10,13 @@ namespace Maxiprod.Application.Services.TransactionService;
 /// <summary>
 /// Service for adding transactions.
 /// </summary>
-public class TransactionAdderService(ITransactionRepository transactionRepository) : ITransactionAdderService
+public class TransactionAdderService
+(
+    ITransactionRepository transactionRepository,
+    IPersonRepository personRepository,
+    ICategoryRepository categoryRepository
+)
+: ITransactionAdderService
 {
     /// <summary>
     /// Adds a new transaction.
@@ -21,12 +29,29 @@ public class TransactionAdderService(ITransactionRepository transactionRepositor
     /// </returns>
     public async Task<int> AddTransactionAsync(TransactionDtoUpsert dto)
     {
-        var transaction = dto.ToEntity();
+        var tempTransaction = dto.ToEntity();
 
-        var isUnique = await transactionRepository.IsTransactionUniqueAsync(transaction);
-        
-        if (!isUnique)
+        var isUnique = transactionRepository.IsTransactionUniqueAsync(tempTransaction);
+        var personTask = personRepository.GetPersonByIdAsync(dto.PersonId);
+        var categoryTask = categoryRepository.GetCategoryByIdAsync(dto.CategoryId);
+
+        await Task.WhenAll(isUnique, personTask, categoryTask);
+
+
+
+        // var isUnique = await transactionRepository.IsTransactionUniqueAsync(transaction);
+        var category = categoryTask.Result;
+        var person = personTask.Result;
+
+        if (!isUnique.Result)
             return -1;
+
+        if (category is null)
+            throw new ArgumentException($"There is no such category with ID: {dto.CategoryId} no the data base!");
+
+        if (person is null)
+            throw new ArgumentException($"There is no such person with ID: {dto.PersonId} no the data base!");
+        var transaction = Transaction.CreateTransaction(dto.TransactionDescription, dto.Amount, dto.TransactionType, person, category);
 
         var transactionId = await transactionRepository.CreateTransactionAsync(transaction);
 
