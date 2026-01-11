@@ -152,6 +152,10 @@ public class PersonServiceTests
         var personId = 1;
 
         _repositoryMock
+            .Setup(repo => repo.DoesPersonExistAsync(It.IsAny<int>()))
+            .ReturnsAsync(true);
+
+        _repositoryMock
             .Setup(repo => repo.DeletePersonAsync(personId))
             .ReturnsAsync(true);
 
@@ -161,10 +165,8 @@ public class PersonServiceTests
         // Assert
         Assert.True(result);
 
-        _repositoryMock.Verify(
-            repo => repo.DeletePersonAsync(personId),
-            Times.Once
-        );
+        _repositoryMock.Verify(repo => repo.DoesPersonExistAsync(It.IsAny<int>()), Times.Once);
+        _repositoryMock.Verify(repo => repo.DeletePersonAsync(It.IsAny<int>()), Times.Once);
     }
 
     [Fact]
@@ -174,7 +176,7 @@ public class PersonServiceTests
         var personId = 999;
 
         _repositoryMock
-            .Setup(repo => repo.DeletePersonAsync(personId))
+            .Setup(repo => repo.DoesPersonExistAsync(It.IsAny<int>()))
             .ReturnsAsync(false);
 
         // Act
@@ -183,10 +185,8 @@ public class PersonServiceTests
         // Assert
         Assert.False(result);
 
-        _repositoryMock.Verify(
-            repo => repo.DeletePersonAsync(personId),
-            Times.Once
-        );
+        _repositoryMock.Verify(repo => repo.DoesPersonExistAsync(It.IsAny<int>()), Times.Once);
+        _repositoryMock.Verify(repo => repo.DeletePersonAsync(It.IsAny<int>()), Times.Never);
     }
 
     [Fact]
@@ -194,6 +194,10 @@ public class PersonServiceTests
     {
         // Arrange
         var personId = 1;
+
+        _repositoryMock
+            .Setup(repo => repo.DoesPersonExistAsync(It.IsAny<int>()))
+            .ReturnsAsync(true);
 
         _repositoryMock
             .Setup(repo => repo.DeletePersonAsync(personId))
@@ -204,10 +208,8 @@ public class PersonServiceTests
             () => _deletionService.DeletePersonAsync(personId)
         );
 
-        _repositoryMock.Verify(
-            repo => repo.DeletePersonAsync(personId),
-            Times.Once
-        );
+        _repositoryMock.Verify(repo => repo.DoesPersonExistAsync(It.IsAny<int>()), Times.Once);
+        _repositoryMock.Verify(repo => repo.DeletePersonAsync(It.IsAny<int>()), Times.Once);
     }
 
     [Fact]
@@ -364,6 +366,9 @@ public class PersonServiceTests
         };
 
         _repositoryMock
+            .Setup(r => r.DoesPersonExistAsync(It.IsAny<int>()))
+            .ReturnsAsync(true);
+        _repositoryMock
             .Setup(r => r.UpdatePersonAsync(It.IsAny<Person>()))
             .ReturnsAsync(true);
 
@@ -373,10 +378,8 @@ public class PersonServiceTests
         // Assert
         Assert.True(result);
 
-        _repositoryMock.Verify(
-            r => r.UpdatePersonAsync(It.IsAny<Person>()),
-            Times.Once
-        );
+        _repositoryMock.Verify(r => r.DoesPersonExistAsync(It.IsAny<int>()), Times.Once);
+        _repositoryMock.Verify(r => r.UpdatePersonAsync(It.IsAny<Person>()), Times.Once);
     }
 
     [Theory]
@@ -393,6 +396,9 @@ public class PersonServiceTests
         };
 
         _repositoryMock
+          .Setup(r => r.DoesPersonExistAsync(It.IsAny<int>()))
+          .ReturnsAsync(true);
+        _repositoryMock
             .Setup(r => r.UpdatePersonAsync(It.IsAny<Person>()))
             .ReturnsAsync(false);
 
@@ -401,10 +407,8 @@ public class PersonServiceTests
             () => _updatableService.UpdatePersonAsync(personId, dto)
         );
 
-        _repositoryMock.Verify(
-            r => r.UpdatePersonAsync(It.IsAny<Person>()),
-            Times.Never
-        );
+        _repositoryMock.Verify(r => r.DoesPersonExistAsync(It.IsAny<int>()), Times.Once);
+        _repositoryMock.Verify(r => r.UpdatePersonAsync(It.IsAny<Person>()), Times.Never);
     }
     [Fact]
     public async Task UpdatePersonAsync_ShouldReturnFalse_WhenAgeIsInvalid()
@@ -418,6 +422,9 @@ public class PersonServiceTests
         };
 
         _repositoryMock
+          .Setup(r => r.DoesPersonExistAsync(It.IsAny<int>()))
+          .ReturnsAsync(true);
+        _repositoryMock
             .Setup(r => r.UpdatePersonAsync(It.IsAny<Person>()))
             .ReturnsAsync(false);
 
@@ -426,10 +433,8 @@ public class PersonServiceTests
             () => _updatableService.UpdatePersonAsync(personId, dto)
         );
 
-        _repositoryMock.Verify(
-            r => r.UpdatePersonAsync(It.IsAny<Person>()),
-            Times.Never
-        );
+        _repositoryMock.Verify(r => r.DoesPersonExistAsync(It.IsAny<int>()), Times.Once);
+        _repositoryMock.Verify(r => r.UpdatePersonAsync(It.IsAny<Person>()), Times.Never);
     }
 
     [Fact]
@@ -444,8 +449,8 @@ public class PersonServiceTests
         };
 
         _repositoryMock
-            .Setup(r => r.UpdatePersonAsync(It.IsAny<Person>()))
-            .ReturnsAsync(false);
+          .Setup(r => r.DoesPersonExistAsync(It.IsAny<int>()))
+          .ReturnsAsync(false);
 
         // Act
         var result = await _updatableService.UpdatePersonAsync(personId, dto);
@@ -453,9 +458,7 @@ public class PersonServiceTests
         // Assert
         Assert.False(result);
 
-        _repositoryMock.Verify(
-            r => r.UpdatePersonAsync(It.IsAny<Person>()),
-            Times.Once
-        );
+        _repositoryMock.Verify(r => r.DoesPersonExistAsync(It.IsAny<int>()), Times.Once);
+        _repositoryMock.Verify(r => r.UpdatePersonAsync(It.IsAny<Person>()), Times.Never);
     }
 }
