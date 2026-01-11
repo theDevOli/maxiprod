@@ -28,7 +28,9 @@ public class TransactionRepository(DataContext dapper) : ITransactionRepository
             category_id AS {nameof(Transaction.CategoryId)},
             person_id AS {nameof(Transaction.PersonId)}
         FROM
-            transaction;
+            transaction
+        ORDER BY
+            transaction_type,transaction_description;
     """;
 
     /// <summary>
@@ -201,26 +203,18 @@ public class TransactionRepository(DataContext dapper) : ITransactionRepository
         return await dapper.LoadDataSingleAsync<Transaction>(_getTransactionByTransactionIdQuery, parameters);
     }
 
-    /// <summary>
-    /// Checks if a transaction is unique asynchronously.
-    /// </summary>
-    /// <param name="transaction">
-    /// The transaction to check for uniqueness.
-    /// </param>
-    /// <returns>
-    /// True if the transaction is unique; otherwise, false.
-    /// </returns>
-    public async Task<bool> IsTransactionUniqueAsync(Transaction transaction)
-    {
-        var parameters = new DynamicParameters();
-        parameters.Add(nameof(Transaction.TransactionDescription), transaction.TransactionDescription, DbType.String);
-        parameters.Add(nameof(Transaction.Amount), transaction.Amount, DbType.Decimal);
-        parameters.Add(nameof(Transaction.TransactionType), transaction.TransactionType.ToString(), DbType.String);
-        parameters.Add(nameof(Transaction.CategoryId), transaction.CategoryId, DbType.Int32);
-        parameters.Add(nameof(Transaction.PersonId), transaction.PersonId, DbType.Int32);
+   // FIXME: I would try to avoid unnecessary data copy on the db, but it's out of scope.
+    // public async Task<bool> IsTransactionUniqueAsync(Transaction transaction)
+    // {
+    //     var parameters = new DynamicParameters();
+    //     parameters.Add(nameof(Transaction.TransactionDescription), transaction.TransactionDescription, DbType.String);
+    //     parameters.Add(nameof(Transaction.Amount), transaction.Amount, DbType.Decimal);
+    //     parameters.Add(nameof(Transaction.TransactionType), transaction.TransactionType.ToString(), DbType.String);
+    //     parameters.Add(nameof(Transaction.CategoryId), transaction.CategoryId, DbType.Int32);
+    //     parameters.Add(nameof(Transaction.PersonId), transaction.PersonId, DbType.Int32);
 
-        return await dapper.LoadDataSingleAsync<Transaction>(_getUniqueTransactionQuery, parameters) is null;
-    }
+    //     return await dapper.LoadDataSingleAsync<Transaction>(_getUniqueTransactionQuery, parameters) is null;
+    // }
 
     /// <summary>
     /// Updates an existing transaction asynchronously.
