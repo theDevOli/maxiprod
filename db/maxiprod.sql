@@ -29,8 +29,17 @@ CREATE TABLE transaction (
     amount                  NUMERIC(12,2) NOT NULL,
     transaction_type        VARCHAR(20) NOT NULL,
 
-    category_id             INT REFERENCES category(category_id) NOT NULL,
-    person_id               INT REFERENCES person(person_id) NOT NULL
+    category_id             INT NOT NULL,
+    person_id               INT NOT NULL,
+
+    CONSTRAINT fk_transaction_category
+    FOREIGN KEY (category_id)
+    REFERENCES category(category_id),
+
+    CONSTRAINT fk_transaction_person
+    FOREIGN KEY (person_id)
+    REFERENCES person(person_id)
+    ON DELETE CASCADE
 );
 
 INSERT INTO person (person_name, age) VALUES 
