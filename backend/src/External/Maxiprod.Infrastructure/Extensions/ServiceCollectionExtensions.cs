@@ -1,6 +1,8 @@
+using Maxiprod.Application.Services.BalanceService;
 using Maxiprod.Application.Services.CategoryService;
 using Maxiprod.Application.Services.PersonService;
 using Maxiprod.Application.Services.TransactionService;
+using Maxiprod.Application.ServicesContracts.BalanceContracts;
 using Maxiprod.Application.ServicesContracts.CategoryContracts;
 using Maxiprod.Application.ServicesContracts.PersonContracts;
 using Maxiprod.Application.ServicesContracts.TransactionContracts;
@@ -26,6 +28,7 @@ public static class ServiceCollectionExtensions
     /// <returns>The updated service collection.</returns>
     private static IServiceCollection AddRepositories(this IServiceCollection services)
     {
+        services.AddScoped<IBalanceRepository, BalanceRepository>();
         services.AddScoped<ICategoryRepository, CategoryRepository>();
         services.AddScoped<IPersonRepository, PersonRepository>();
         services.AddScoped<ITransactionRepository, TransactionRepository>();
@@ -44,6 +47,8 @@ public static class ServiceCollectionExtensions
     /// </returns>
     private static IServiceCollection AddServices(this IServiceCollection services)
     {
+        services.AddScoped<IBalanceService, BalanceService>();
+
         services.AddScoped<ICategoryAdderService, CategoryAdderService>();
         services.AddScoped<ICategoryDeletionService, CategoryDeletionService>();
         services.AddScoped<ICategoryGetterByIdService, CategoryGetterByIdService>();
