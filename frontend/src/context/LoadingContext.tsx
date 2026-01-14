@@ -6,6 +6,15 @@ import {
     type ReactNode,
 } from "react"
 
+/**
+ * Type definition for the LoadingContext.
+ *
+ * @typedef {Object} LoadingContextType
+ * @property {boolean} isLoading - Indicates whether a loading process is active.
+ * @property {(isLoading: boolean) => void} setIsLoading - Directly sets the loading state.
+ * @property {() => void} startLoading - Sets `isLoading` to true.
+ * @property {() => void} stopLoading - Sets `isLoading` to false.
+ */
 interface LoadingContextType {
     isLoading: boolean
     setIsLoading: (isLoading: boolean) => void
@@ -15,6 +24,15 @@ interface LoadingContextType {
 
 const LoadingContext = createContext<LoadingContextType | undefined>(undefined)
 
+/**
+ * Custom hook to access the LoadingContext.
+ *
+ * This hook provides an easy way to read and modify the loading state
+ * anywhere in the component tree wrapped by `LoadingProvider`.
+ *
+ * @throws Will throw an error if used outside a `LoadingProvider`.
+ * @returns {LoadingContextType} The context object with loading state and helper functions.
+ */
 export function useLoading(): LoadingContextType {
     const context = useContext(LoadingContext)
     if (!context) {
