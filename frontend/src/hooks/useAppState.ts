@@ -25,6 +25,15 @@ export function useAppState() {
         storageService.saveCurrentRoute(route)
     }, [location.pathname])
 
+    /**
+     * Restores the previously saved route and form data if restoration
+     * conditions are met.
+     *
+     * When restored, navigation replaces the current history entry
+     * and injects the saved form data into route state.
+     *
+     * @returns The restored state if navigation occurs, otherwise null.
+     */
     const restoreState = useCallback(() => {
         const savedState = storageService.getState()
 
@@ -40,10 +49,19 @@ export function useAppState() {
         return null
     }, [navigate, location.pathname])
 
+    /**
+     * Save form data to local storage.
+     *
+     * @param formData - Arbitrary form data to be saved.
+     */
     const saveFormData = useCallback((formData: any) => {
         storageService.saveFormData(formData)
     }, [])
 
+    /**
+     * Clears all persisted application state from local storage.
+     * NOTE: To be used in the future when login is implemented.
+     */
     const clearState = useCallback(() => {
         storageService.clearState()
     }, [])
