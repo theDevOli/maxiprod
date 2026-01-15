@@ -101,7 +101,7 @@ export default function NewPerson() {
     return (
         <form className="container-fluid mt-5" onSubmit={(e) => handlePost(e)}>
             <div className="row justify-content-center">
-                <div className="col-12 col-lg-10 col-xl-9 col-xxl-8">
+                <div className="col-12 col-md-8 col-lg-6 col-xl-5">
                     <div className="box p-5 p-md-5 shadow-lg rounded-4">
                         <h1 className="text-center mb-5 fw-bold">
                             Cadastro de Pessoa

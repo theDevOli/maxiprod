@@ -63,7 +63,7 @@ export default function NewTransaction() {
      */
     async function getEntities(): Promise<void> {
         try {
-            startLoading()
+            // startLoading()
             const [tempPeople, tempCategories] = await Promise.all([
                 personServices.getAll(),
                 categoryServices.getAll(),
@@ -76,9 +76,10 @@ export default function NewTransaction() {
             window.alert(
                 "Error para pegar todas as categorias no banco de dados. Por favor, tente novamente!"
             )
-        } finally {
-            stopLoading()
         }
+        // finally {
+        //     stopLoading()
+        // }
     }
 
     /**
@@ -123,6 +124,9 @@ export default function NewTransaction() {
             categoryId: Number(formData.categoryId),
             personId: Number(formData.personId),
         }
+
+        setFormData(getInitialState())
+
         try {
             await transactionServices.create(payload)
             window.alert("Tansação adicionada com sucesso ao banco de dados!")
@@ -146,7 +150,7 @@ export default function NewTransaction() {
     return (
         <form className="container-fluid mt-5" onSubmit={(e) => handlePost(e)}>
             <div className="row justify-content-center">
-                <div className="col-12 col-lg-10 col-xl-9 col-xxl-8">
+                <div className="col-12 col-md-8 col-lg-6 col-xl-5">
                     <div className="box p-5 p-md-5 shadow-lg rounded-4">
                         <h1 className="text-center mb-5 fw-bold">
                             Cadastro de Transações
@@ -190,6 +194,7 @@ export default function NewTransaction() {
                                 placeholder="Digite o valor da transação"
                                 required
                                 min={0}
+                                step="0.01"
                             />
                         </div>
 
@@ -233,22 +238,24 @@ export default function NewTransaction() {
                                 <option value={""}>
                                     Selecione uma categoria!
                                 </option>
-                                {categories
-                                    .filter((c) => {
-                                        return (
-                                            c.goal.toLocaleLowerCase() ===
-                                                formData.transactionType.toLocaleLowerCase() ||
-                                            c.goal.toLocaleLowerCase() ===
-                                                "ambas"
-                                        )
-                                    })
-                                    .map((c) => (
-                                        <option
-                                            value={c.categoryId}
-                                            key={c.categoryId}>
-                                            {c.categoryDescription}
-                                        </option>
-                                    ))}
+                                {formData.transactionType
+                                    ? categories
+                                          .filter((c) => {
+                                              return (
+                                                  c.goal?.toLocaleLowerCase() ===
+                                                      formData.transactionType?.toLocaleLowerCase() ||
+                                                  c.goal?.toLocaleLowerCase() ===
+                                                      "ambas"
+                                              )
+                                          })
+                                          .map((c) => (
+                                              <option
+                                                  value={c.categoryId}
+                                                  key={c.categoryId}>
+                                                  {c.categoryDescription}
+                                              </option>
+                                          ))
+                                    : null}
                             </select>
                         </div>
 
@@ -267,7 +274,7 @@ export default function NewTransaction() {
                                 required>
                                 <option value={""}>Selecione uma pessoa</option>
                                 {people.map((p) => (
-                                    <option value={p.personId}>
+                                    <option key={p.personId} value={p.personId}>
                                         {p.personName}
                                     </option>
                                 ))}
