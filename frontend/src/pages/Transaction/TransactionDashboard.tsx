@@ -1,6 +1,4 @@
 import { useEffect, useState } from "react"
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
-import { faTrashCan } from "@fortawesome/free-solid-svg-icons"
 import { Link } from "react-router-dom"
 import { useLoading } from "../../context/LoadingContext"
 import { transactionServices } from "../../services/transactionServices"
@@ -69,23 +67,6 @@ export default function TransactionDashboard() {
         }
     }
 
-    async function deleteTransaction(transactionId: number): Promise<void> {
-        try {
-            startLoading()
-            await transactionServices.delete(transactionId)
-
-            setTransactions((transaction) =>
-                transaction.filter((t) => t.transactionId != transactionId)
-            )
-            window.alert("Transação removida do banco de dados com sucesso!")
-        } catch (err: any) {
-            window.alert("Error ao deletar transação do banco de dados!")
-            console.error(err)
-        } finally {
-            stopLoading()
-        }
-    }
-
     if (transactions.length === 0)
         return (
             <>
@@ -112,7 +93,6 @@ export default function TransactionDashboard() {
                         <th scope="col">Tipo de Transação</th>
                         <th scope="col">Categoria</th>
                         <th scope="col">Pessoa</th>
-                        <th scope="col">Ação</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -123,16 +103,6 @@ export default function TransactionDashboard() {
                             <td>{t.type}</td>
                             <td>{t.category}</td>
                             <td>{t.person}</td>
-                            <td>
-                                <button
-                                    className="btn btn-danger btn-sm mx-2"
-                                    onClick={() =>
-                                        deleteTransaction(t.transactionId)
-                                    }>
-                                    <FontAwesomeIcon icon={faTrashCan} />
-                                    Excluir
-                                </button>
-                            </td>
                         </tr>
                     ))}
                 </tbody>

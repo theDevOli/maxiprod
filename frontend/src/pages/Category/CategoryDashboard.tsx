@@ -41,30 +41,6 @@ export default function CategoryDashboard() {
         }
     }
 
-    /**
-     * Deletes a category by its identifier and updates
-     * the local state accordingly.
-     *
-     * @param categoryId - Identifier of the category to delete
-     */
-    async function deleteCategory(categoryId: number): Promise<void> {
-        try {
-            startLoading()
-            await categoryServices.delete(categoryId)
-
-            setCategories((category) =>
-                category.filter((c) => c.categoryId != categoryId)
-            )
-
-            window.alert("Operação concluida com sucesso!")
-        } catch (err: any) {
-            window.alert("Erro ao deletar usuário!")
-            console.error(err)
-        } finally {
-            stopLoading()
-        }
-    }
-
     if (categories.length === 0)
         return (
             <>
@@ -84,7 +60,6 @@ export default function CategoryDashboard() {
                     <tr>
                         <th scope="col">Descrição</th>
                         <th scope="col">Finalidade</th>
-                        <th scope="col">Ação</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -92,16 +67,6 @@ export default function CategoryDashboard() {
                         <tr key={c.categoryId}>
                             <td>{c.categoryDescription}</td>
                             <td>{c.goal}</td>
-                            <td>
-                                <button
-                                    className="btn btn-danger btn-sm mx-2"
-                                    onClick={() =>
-                                        deleteCategory(c.categoryId)
-                                    }>
-                                    <FontAwesomeIcon icon={faTrashCan} />
-                                    Excluir
-                                </button>
-                            </td>
                         </tr>
                     ))}
                 </tbody>
