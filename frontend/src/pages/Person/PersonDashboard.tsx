@@ -30,6 +30,9 @@ export default function PersonDashboard() {
 
             setPerson(data)
         } catch (err: any) {
+            window.alert(
+                "Não foi possivel pegar os dados do banco de dados. Por favor tente mais tarde!"
+            )
             console.error(err)
         } finally {
             stopLoading()
@@ -47,8 +50,11 @@ export default function PersonDashboard() {
             await personServices.delete(personId)
 
             setPerson((person) => person.filter((p) => p.personId != personId))
+            window.alert("Usuário removido do banco de dados com sucesso!")
         } catch (err: any) {
-            //   setError(err.message || 'Erro ao carregar usuários');
+            window.alert(
+                "Não foi possível remover o usuário do banco de dados!"
+            )
             console.error(err)
         } finally {
             stopLoading()
