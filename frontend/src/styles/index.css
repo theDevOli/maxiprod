@@ -301,7 +301,7 @@ table.table-dark .btn-danger:hover {
 }
 .table thead th {
     position: sticky;
-    top: 7rem;
+    top: 0rem;
     z-index: 1000;
 }
 
